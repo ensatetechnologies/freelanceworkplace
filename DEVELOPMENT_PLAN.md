@@ -297,6 +297,12 @@ python manage.py test
 - [x] Dashboard templates (freelancer, client)
 - [x] Profile templates (profile, profile_edit, settings, freelancer_list)
 - [x] How it works page
+- [x] Contract templates (list, detail, workspace, add_milestone)
+- [x] Payment templates (wallet, transactions, fund_escrow, withdraw)
+- [x] Review templates (create, list)
+- [x] Notification templates (list)
+- [x] Admin dashboard template
+- [x] Error pages (404, 500, 403)
 
 ### 4.13 Static Files ✅
 - [x] Main CSS file
@@ -308,13 +314,13 @@ python manage.py test
 
 ## 5. Remaining TODOs
 
-### 5.1 High Priority
-- [ ] Contract templates (detail, list, workspace, milestones)
-- [ ] Payment templates (wallet, checkout, transactions)
-- [ ] Review templates (submit, list)
-- [ ] Notification templates (list)
-- [ ] Admin dashboard templates
-- [ ] Error pages (404, 500, 403)
+### 5.1 High Priority (COMPLETED ✅)
+- [x] Contract templates (detail, list, workspace, milestones)
+- [x] Payment templates (wallet, checkout, transactions, fund_escrow, withdraw)
+- [x] Review templates (submit, list)
+- [x] Notification templates (list)
+- [x] Admin dashboard templates
+- [x] Error pages (404, 500, 403)
 - [ ] Email templates
 
 ### 5.2 Medium Priority
