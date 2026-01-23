@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Account Settings - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Settings Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <a href="#account" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                            <i class="bi bi-person me-2"></i>Account
+                        </a>
+                        <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="bi bi-shield-lock me-2"></i>Security
+                        </a>
+                        <a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="bi bi-bell me-2"></i>Notifications
+                        </a>
+                        <a href="#privacy" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="bi bi-eye-slash me-2"></i>Privacy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="col-lg-9">
+            <div class="tab-content">
+                <!-- Account Settings -->
+                <div class="tab-pane fade show active" id="account">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Account Information</h5>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4 text-muted">Email</div>
+                                <div class="col-md-8">
+                                    {{ user.email }}
+                                    {% if user.is_verified %}
+                                        <span class="badge bg-success ms-2">Verified</span>
+                                    {% else %}
+                                        <span class="badge bg-warning ms-2">Not Verified</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4 text-muted">Username</div>
+                                <div class="col-md-8">{{ user.username }}</div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4 text-muted">Account Type</div>
+                                <div class="col-md-8">
+                                    <span class="badge {% if user.role == 'freelancer' %}bg-primary{% else %}bg-success{% endif %}">
+                                        {{ user.get_role_display }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4 text-muted">Member Since</div>
+                                <div class="col-md-8">{{ user.date_joined|date:"F d, Y" }}</div>
+                            </div>
+
+                            <hr class="my-4">
+                            
+                            <a href="{% url 'accounts:profile_edit' %}" class="btn btn-primary">
+                                <i class="bi bi-pencil me-2"></i>Edit Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="tab-pane fade" id="security">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Security Settings</h5>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-medium">Change Password</h6>
+                                <p class="text-muted small">Update your password regularly to keep your account secure.</p>
+                                <a href="{% url 'account_change_password' %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-key me-2"></i>Change Password
+                                </a>
+                            </div>
+
+                            <hr>
+
+                            <div class="mb-4">
+                                <h6 class="fw-medium">Connected Accounts</h6>
+                                <p class="text-muted small">Manage your connected social accounts.</p>
+                                <a href="{% url 'socialaccount_connections' %}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-link-45deg me-2"></i>Manage Connections
+                                </a>
+                            </div>
+
+                            <hr>
+
+                            <div>
+                                <h6 class="fw-medium text-danger">Delete Account</h6>
+                                <p class="text-muted small">Permanently delete your account and all associated data.</p>
+                                <button type="button" class="btn btn-outline-danger btn-sm" 
+                                        data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                    <i class="bi bi-trash me-2"></i>Delete Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="tab-pane fade" id="notifications">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Notification Preferences</h5>
+                            
+                            <form method="post" action="{% url 'accounts:settings' %}">
+                                {% csrf_token %}
+                                
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                        <label class="form-check-label" for="emailNotifications">
+                                            Email Notifications
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Receive email notifications for important updates</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="proposalNotifications" checked>
+                                        <label class="form-check-label" for="proposalNotifications">
+                                            New Proposal Notifications
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Get notified when you receive new proposals</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="messageNotifications" checked>
+                                        <label class="form-check-label" for="messageNotifications">
+                                            Message Notifications
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Get notified for new messages</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="marketingEmails">
+                                        <label class="form-check-label" for="marketingEmails">
+                                            Marketing Emails
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Receive updates about new features and promotions</small>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-2"></i>Save Preferences
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Settings -->
+                <div class="tab-pane fade" id="privacy">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Privacy Settings</h5>
+                            
+                            <form method="post" action="{% url 'accounts:settings' %}">
+                                {% csrf_token %}
+                                
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="profileVisible" checked>
+                                        <label class="form-check-label" for="profileVisible">
+                                            Public Profile
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Make your profile visible to other users</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="showEarnings">
+                                        <label class="form-check-label" for="showEarnings">
+                                            Show Earnings
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Display your total earnings on your profile</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="showActivity" checked>
+                                        <label class="form-check-label" for="showActivity">
+                                            Show Activity Status
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">Let others see when you were last active</small>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-lg me-2"></i>Save Settings
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-danger">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Delete Account
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                <p class="text-muted small">All your data, including projects, contracts, and messages will be permanently deleted.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="{% url 'accounts:delete' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Delete My Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

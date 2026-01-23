@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Connected Accounts - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-link-45deg text-primary" style="font-size: 3rem;"></i>
+                        <h3 class="fw-bold mt-3">Connected Accounts</h3>
+                        <p class="text-muted">Manage your social account connections</p>
+                    </div>
+
+                    {% if socialaccounts %}
+                        <form method="post" action="{% url 'socialaccount_connections' %}">
+                            {% csrf_token %}
+                            
+                            <ul class="list-group list-group-flush mb-4">
+                                {% for account in socialaccounts %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-{{ account.provider }} me-2"></i>
+                                        <strong>{{ account.provider|title }}</strong>
+                                        <span class="text-muted ms-2">{{ account.uid }}</span>
+                                    </div>
+                                    <button type="submit" name="account" value="{{ account.id }}" 
+                                            class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-x-lg"></i> Disconnect
+                                    </button>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </form>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="bi bi-link-45deg text-muted" style="font-size: 3rem;"></i>
+                            <p class="text-muted mt-3">No social accounts connected yet.</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="text-center">
+                        <a href="{% url 'accounts:settings' %}" class="text-decoration-none">
+                            <i class="bi bi-arrow-left me-1"></i>Back to settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

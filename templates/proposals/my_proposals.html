@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Proposals - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold mb-2">My Proposals</h2>
+            <p class="text-muted">Track and manage all your submitted proposals</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Filter by Status</h6>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'proposals:my_proposals' %}" 
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if not request.GET.status %}active{% endif %}">
+                            All
+                            <span class="badge bg-secondary rounded-pill">{{ total_count }}</span>
+                        </a>
+                        <a href="?status=pending" 
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if request.GET.status == 'pending' %}active{% endif %}">
+                            <span><i class="bi bi-hourglass text-warning me-2"></i>Pending</span>
+                            <span class="badge bg-warning rounded-pill">{{ pending_count }}</span>
+                        </a>
+                        <a href="?status=shortlisted" 
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if request.GET.status == 'shortlisted' %}active{% endif %}">
+                            <span><i class="bi bi-bookmark text-info me-2"></i>Shortlisted</span>
+                            <span class="badge bg-info rounded-pill">{{ shortlisted_count }}</span>
+                        </a>
+                        <a href="?status=accepted" 
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if request.GET.status == 'accepted' %}active{% endif %}">
+                            <span><i class="bi bi-check-circle text-success me-2"></i>Accepted</span>
+                            <span class="badge bg-success rounded-pill">{{ accepted_count }}</span>
+                        </a>
+                        <a href="?status=rejected" 
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if request.GET.status == 'rejected' %}active{% endif %}">
+                            <span><i class="bi bi-x-circle text-danger me-2"></i>Rejected</span>
+                            <span class="badge bg-danger rounded-pill">{{ rejected_count }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Quick Stats</h6>
+                    <div class="mb-2">
+                        <small class="text-muted d-block">Success Rate</small>
+                        <strong>{% if total_count > 0 %}{{ accepted_count|floatformat:0 }}%{% else %}N/A{% endif %}</strong>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Active Proposals</small>
+                        <strong>{{ pending_count|add:shortlisted_count }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proposals List -->
+        <div class="col-lg-9">
+            {% if proposals %}
+                {% for proposal in proposals %}
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="mb-1">
+                                    <a href="{% url 'projects:detail' slug=proposal.project.slug %}" class="text-decoration-none text-dark">
+                                        {{ proposal.project.title }}
+                                    </a>
+                                </h5>
+                                <div class="text-muted small">
+                                    <span>{{ proposal.project.client.get_full_name|default:proposal.project.client.username }}</span>
+                                    <span class="mx-2">•</span>
+                                    <span>Posted {{ proposal.project.created_at|timesince }} ago</span>
+                                </div>
+                            </div>
+                            <span class="badge fs-6
+                                {% if proposal.status == 'pending' %}bg-warning
+                                {% elif proposal.status == 'shortlisted' %}bg-info
+                                {% elif proposal.status == 'accepted' %}bg-success
+                                {% elif proposal.status == 'rejected' %}bg-danger
+                                {% else %}bg-secondary{% endif %}">
+                                {{ proposal.get_status_display }}
+                            </span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-auto">
+                                <small class="text-muted d-block">Your Bid</small>
+                                <strong class="text-primary">${{ proposal.bid_amount }}</strong>
+                            </div>
+                            <div class="col-auto">
+                                <small class="text-muted d-block">Delivery</small>
+                                <strong>{{ proposal.estimated_duration }}</strong>
+                            </div>
+                            <div class="col-auto">
+                                <small class="text-muted d-block">Client Budget</small>
+                                <strong>${{ proposal.project.budget_min }} - ${{ proposal.project.budget_max }}</strong>
+                            </div>
+                            <div class="col-auto">
+                                <small class="text-muted d-block">Submitted</small>
+                                <strong>{{ proposal.created_at|date:"M d, Y" }}</strong>
+                            </div>
+                        </div>
+
+                        <p class="text-muted mb-3">{{ proposal.cover_letter|truncatechars:150 }}</p>
+
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{% url 'proposals:detail' pk=proposal.pk %}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i>View Proposal
+                            </a>
+                            
+                            {% if proposal.status == 'pending' %}
+                            <a href="{% url 'proposals:edit' pk=proposal.pk %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-pencil me-1"></i>Edit
+                            </a>
+                            <form method="post" action="{% url 'proposals:withdraw' pk=proposal.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm" 
+                                        onclick="return confirm('Withdraw this proposal?')">
+                                    <i class="bi bi-x-circle me-1"></i>Withdraw
+                                </button>
+                            </form>
+                            {% endif %}
+
+                            {% if proposal.status == 'accepted' %}
+                            <a href="{% url 'contracts:list' %}" class="btn btn-success btn-sm">
+                                <i class="bi bi-file-earmark-text me-1"></i>View Contract
+                            </a>
+                            {% endif %}
+
+                            <a href="{% url 'messaging:start' %}?recipient={{ proposal.project.client.pk }}" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-chat me-1"></i>Message Client
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <nav class="mt-4" aria-label="Proposals pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+            {% else %}
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-file-earmark-x text-muted" style="font-size: 4rem;"></i>
+                        <h4 class="mt-3">No Proposals Found</h4>
+                        <p class="text-muted">
+                            {% if request.GET.status %}
+                                You don't have any {{ request.GET.status }} proposals.
+                            {% else %}
+                                You haven't submitted any proposals yet. Start bidding on projects to get work!
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'projects:list' %}" class="btn btn-primary">
+                            <i class="bi bi-search me-2"></i>Browse Projects
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

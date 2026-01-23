@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Proposal - {{ proposal.project.title }} - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Project Summary -->
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Project Summary</h5>
+                    
+                    <h6 class="mb-2">
+                        <a href="{% url 'projects:detail' slug=proposal.project.slug %}" class="text-decoration-none">
+                            {{ proposal.project.title }}
+                        </a>
+                    </h6>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-primary-subtle text-primary">{{ proposal.project.category.name }}</span>
+                        <span class="badge bg-secondary-subtle text-secondary">{{ proposal.project.get_experience_level_display }}</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Budget</small>
+                        <strong>${{ proposal.project.budget_min }} - ${{ proposal.project.budget_max }}</strong>
+                        <span class="text-muted">({{ proposal.project.get_budget_type_display }})</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Duration</small>
+                        <strong>{{ proposal.project.estimated_duration }}</strong>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="alert alert-info small mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        You can only edit pending proposals. Once reviewed by the client, the proposal cannot be modified.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4">
+                        <i class="bi bi-pencil me-2 text-primary"></i>Edit Your Proposal
+                    </h4>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="id_bid_amount" class="form-label fw-medium">Your Bid Amount ($)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" name="bid_amount" id="id_bid_amount" 
+                                       class="form-control form-control-lg" 
+                                       min="1" step="0.01" required
+                                       value="{{ form.bid_amount.value|default:proposal.bid_amount }}">
+                            </div>
+                            <small class="text-muted">
+                                Client budget: ${{ proposal.project.budget_min }} - ${{ proposal.project.budget_max }}
+                            </small>
+                            {% if form.bid_amount.errors %}
+                                <div class="text-danger small">{{ form.bid_amount.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_estimated_duration" class="form-label fw-medium">Estimated Delivery Time</label>
+                            <input type="text" name="estimated_duration" id="id_estimated_duration" 
+                                   class="form-control" 
+                                   placeholder="e.g., 2 weeks, 1 month"
+                                   value="{{ form.estimated_duration.value|default:proposal.estimated_duration }}" required>
+                            {% if form.estimated_duration.errors %}
+                                <div class="text-danger small">{{ form.estimated_duration.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_cover_letter" class="form-label fw-medium">Cover Letter</label>
+                            <textarea name="cover_letter" id="id_cover_letter" 
+                                      class="form-control" rows="8" required>{{ form.cover_letter.value|default:proposal.cover_letter }}</textarea>
+                            <small class="text-muted">
+                                Highlight your relevant experience and how you plan to approach this project.
+                            </small>
+                            {% if form.cover_letter.errors %}
+                                <div class="text-danger small">{{ form.cover_letter.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'proposals:detail' pk=proposal.pk %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-lg me-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

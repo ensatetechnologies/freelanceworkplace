@@ -1,0 +1,40 @@
+<div class="card h-100 border-0 shadow-sm project-card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            {% if project.is_urgent %}
+                <span class="badge bg-danger">Urgent</span>
+            {% elif project.is_featured %}
+                <span class="badge bg-warning text-dark">Featured</span>
+            {% else %}
+                <span class="badge bg-light text-dark">{{ project.category.name|default:"Uncategorized" }}</span>
+            {% endif %}
+            <small class="text-muted">{{ project.created_at|timesince }} ago</small>
+        </div>
+        
+        <h5 class="card-title mb-2">
+            <a href="{% url 'projects:detail' slug=project.slug %}" class="text-decoration-none text-dark stretched-link">
+                {{ project.title|truncatewords:10 }}
+            </a>
+        </h5>
+        
+        <p class="card-text text-muted small mb-3">
+            {{ project.description|truncatewords:20 }}
+        </p>
+        
+        <div class="d-flex flex-wrap gap-1 mb-3">
+            {% for skill in project.get_skills_list|slice:":3" %}
+                <span class="badge bg-light text-secondary">{{ skill }}</span>
+            {% endfor %}
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <span class="fw-semibold text-primary">{{ project.get_budget_display }}</span>
+                <span class="text-muted small">• {{ project.get_experience_level_display }}</span>
+            </div>
+            <div class="text-muted small">
+                <i class="bi bi-file-text me-1"></i>{{ project.proposals_count }} proposals
+            </div>
+        </div>
+    </div>
+</div>

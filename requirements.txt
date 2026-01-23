@@ -1,0 +1,27 @@
+# Django Core
+Django>=5.0,<5.1
+django-environ>=0.11.2
+django-extensions>=3.2.3
+
+# Database
+mysqlclient>=2.2.0
+django-mysql>=4.12.0
+
+# REST API
+djangorestframework>=3.14.0
+django-filter>=23.5
+django-cors-headers>=4.3.1
+
+# Authentication
+django-allauth>=0.60.0
+
+# Storage & Media
+Pillow>=10.1.0
+
+# Utilities
+python-slugify>=8.0.1
+django-crispy-forms>=2.1
+crispy-bootstrap5>=2023.10
+
+# Development
+django-debug-toolbar>=4.2.0

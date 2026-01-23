@@ -1,0 +1,151 @@
+[
+    {
+        "model": "sites.site",
+        "pk": 1,
+        "fields": {
+            "domain": "localhost:8000",
+            "name": "Freelance Marketplace"
+        }
+    },
+    {
+        "model": "projects.category",
+        "pk": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "fields": {
+            "name": "Web Development",
+            "slug": "web-development",
+            "description": "Build websites and web applications",
+            "icon": "bi-globe",
+            "is_active": true,
+            "order": 1
+        }
+    },
+    {
+        "model": "projects.category",
+        "pk": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        "fields": {
+            "name": "Mobile Development",
+            "slug": "mobile-development",
+            "description": "iOS and Android app development",
+            "icon": "bi-phone",
+            "is_active": true,
+            "order": 2
+        }
+    },
+    {
+        "model": "projects.category",
+        "pk": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+        "fields": {
+            "name": "Design & Creative",
+            "slug": "design-creative",
+            "description": "Graphic design, UI/UX, and branding",
+            "icon": "bi-palette",
+            "is_active": true,
+            "order": 3
+        }
+    },
+    {
+        "model": "projects.category",
+        "pk": "d4e5f6a7-b8c9-0123-def0-234567890123",
+        "fields": {
+            "name": "Writing & Content",
+            "slug": "writing-content",
+            "description": "Content writing, copywriting, and editing",
+            "icon": "bi-pencil",
+            "is_active": true,
+            "order": 4
+        }
+    },
+    {
+        "model": "projects.category",
+        "pk": "e5f6a7b8-c9d0-1234-ef01-345678901234",
+        "fields": {
+            "name": "Data Science & AI",
+            "slug": "data-science-ai",
+            "description": "Machine learning, data analysis, and AI",
+            "icon": "bi-cpu",
+            "is_active": true,
+            "order": 5
+        }
+    },
+    {
+        "model": "projects.category",
+        "pk": "f6a7b8c9-d0e1-2345-f012-456789012345",
+        "fields": {
+            "name": "Marketing",
+            "slug": "marketing",
+            "description": "Digital marketing, SEO, and social media",
+            "icon": "bi-megaphone",
+            "is_active": true,
+            "order": 6
+        }
+    },
+    {
+        "model": "projects.category",
+        "pk": "a7b8c9d0-e1f2-3456-0123-567890123456",
+        "fields": {
+            "name": "Video & Animation",
+            "slug": "video-animation",
+            "description": "Video editing, animation, and motion graphics",
+            "icon": "bi-camera-video",
+            "is_active": true,
+            "order": 7
+        }
+    },
+    {
+        "model": "projects.category",
+        "pk": "b8c9d0e1-f2a3-4567-1234-678901234567",
+        "fields": {
+            "name": "Admin & Support",
+            "slug": "admin-support",
+            "description": "Virtual assistance and customer support",
+            "icon": "bi-headset",
+            "is_active": true,
+            "order": 8
+        }
+    },
+    {
+        "model": "accounts.skill",
+        "pk": "s1a2b3c4-d5e6-7890-abcd-ef1234567890",
+        "fields": {
+            "name": "Python",
+            "slug": "python",
+            "category": "programming"
+        }
+    },
+    {
+        "model": "accounts.skill",
+        "pk": "s2b3c4d5-e6f7-8901-bcde-f12345678901",
+        "fields": {
+            "name": "Django",
+            "slug": "django",
+            "category": "programming"
+        }
+    },
+    {
+        "model": "accounts.skill",
+        "pk": "s3c4d5e6-f7a8-9012-cdef-123456789012",
+        "fields": {
+            "name": "JavaScript",
+            "slug": "javascript",
+            "category": "programming"
+        }
+    },
+    {
+        "model": "accounts.skill",
+        "pk": "s4d5e6f7-a8b9-0123-def0-234567890123",
+        "fields": {
+            "name": "React",
+            "slug": "react",
+            "category": "programming"
+        }
+    },
+    {
+        "model": "accounts.skill",
+        "pk": "s5e6f7a8-b9c0-1234-ef01-345678901234",
+        "fields": {
+            "name": "UI/UX Design",
+            "slug": "ui-ux-design",
+            "category": "design"
+        }
+    }
+]

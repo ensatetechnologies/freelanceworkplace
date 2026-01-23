@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Post a Project - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <h2>Post a New Project</h2>
+                <p class="text-muted">Describe your project and find the perfect freelancer</p>
+            </div>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <h5 class="mb-3"><i class="bi bi-info-circle me-2"></i>Project Details</h5>
+                            {{ form.title|as_crispy_field }}
+                            {{ form.description|as_crispy_field }}
+                            {{ form.category|as_crispy_field }}
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="mb-4">
+                            <h5 class="mb-3"><i class="bi bi-tags me-2"></i>Skills Required</h5>
+                            {{ form.skills_input|as_crispy_field }}
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="mb-4">
+                            <h5 class="mb-3"><i class="bi bi-cash me-2"></i>Budget</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{ form.budget_type|as_crispy_field }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.budget_min|as_crispy_field }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.budget_max|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="mb-4">
+                            <h5 class="mb-3"><i class="bi bi-clock me-2"></i>Timeline & Requirements</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.experience_level|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.estimated_duration|as_crispy_field }}
+                                </div>
+                            </div>
+                            {{ form.deadline|as_crispy_field }}
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="mb-4">
+                            <div class="form-check">
+                                {{ form.is_urgent }}
+                                <label class="form-check-label" for="{{ form.is_urgent.id_for_label }}">
+                                    <strong>Mark as Urgent</strong>
+                                    <small class="text-muted d-block">Urgent projects get more visibility</small>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-3">
+                            <button type="submit" name="status" value="draft" class="btn btn-outline-secondary">
+                                <i class="bi bi-save me-2"></i>Save as Draft
+                            </button>
+                            <button type="submit" name="status" value="open" class="btn btn-primary flex-grow-1">
+                                <i class="bi bi-send me-2"></i>Post Project
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

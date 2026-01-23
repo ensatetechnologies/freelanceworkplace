@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse Projects - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="bi bi-funnel me-2"></i>Filters</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="">
+                        <div class="mb-3">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="q" class="form-control" placeholder="Keywords..." value="{{ current_filters.q }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select">
+                                <option value="">All Categories</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.slug }}" {% if current_filters.category == category.slug %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Budget Type</label>
+                            <select name="budget_type" class="form-select">
+                                <option value="">All Types</option>
+                                <option value="fixed" {% if current_filters.budget_type == 'fixed' %}selected{% endif %}>Fixed Price</option>
+                                <option value="hourly" {% if current_filters.budget_type == 'hourly' %}selected{% endif %}>Hourly Rate</option>
+                                <option value="milestone" {% if current_filters.budget_type == 'milestone' %}selected{% endif %}>Milestone Based</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Experience Level</label>
+                            <select name="experience_level" class="form-select">
+                                <option value="">All Levels</option>
+                                <option value="entry" {% if current_filters.experience_level == 'entry' %}selected{% endif %}>Entry Level</option>
+                                <option value="intermediate" {% if current_filters.experience_level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                                <option value="expert" {% if current_filters.experience_level == 'expert' %}selected{% endif %}>Expert</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        <a href="{% url 'projects:list' %}" class="btn btn-outline-secondary w-100 mt-2">Clear Filters</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Project List -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Browse Projects</h2>
+                <div class="d-flex gap-2">
+                    <select name="order" class="form-select form-select-sm" style="width: auto;" onchange="window.location.href='?order=' + this.value">
+                        <option value="newest" {% if current_filters.order == 'newest' %}selected{% endif %}>Newest First</option>
+                        <option value="budget_high" {% if current_filters.order == 'budget_high' %}selected{% endif %}>Budget: High to Low</option>
+                        <option value="budget_low" {% if current_filters.order == 'budget_low' %}selected{% endif %}>Budget: Low to High</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                {% for project in projects %}
+                <div class="col-md-6">
+                    {% include 'projects/includes/project_card.html' with project=project %}
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="text-center py-5">
+                        <i class="bi bi-search display-1 text-muted"></i>
+                        <h4 class="mt-3">No projects found</h4>
+                        <p class="text-muted">Try adjusting your filters or search criteria.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
