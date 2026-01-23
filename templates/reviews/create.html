@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Leave a Review - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+    .star-rating input {
+        display: none;
+    }
+    .star-rating label {
+        cursor: pointer;
+        font-size: 2rem;
+        color: #dee2e6;
+        padding: 0 2px;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label {
+        color: #ffc107;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">Contracts</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'contracts:detail' pk=contract.pk %}">{{ contract.title|truncatechars:25 }}</a></li>
+                    <li class="breadcrumb-item active">Review</li>
+                </ol>
+            </nav>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <div class="bg-warning-subtle rounded-circle d-inline-flex p-3 mb-3">
+                            <i class="bi bi-star text-warning" style="font-size: 2rem;"></i>
+                        </div>
+                        <h4 class="fw-bold">Leave a Review</h4>
+                        <p class="text-muted">Share your experience with {{ reviewee.get_full_name|default:reviewee.username }}</p>
+                    </div>
+
+                    <!-- Reviewee Info -->
+                    <div class="d-flex align-items-center p-3 bg-light rounded mb-4">
+                        {% if reviewee.avatar %}
+                            <img src="{{ reviewee.avatar.url }}" class="rounded-circle me-3" width="60" height="60">
+                        {% else %}
+                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3"
+                                 style="width: 60px; height: 60px;">
+                                <span class="text-white fw-bold fs-5">
+                                    {{ reviewee.first_name|slice:":1"|upper }}{{ reviewee.last_name|slice:":1"|upper }}
+                                </span>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <strong>{{ reviewee.get_full_name|default:reviewee.username }}</strong>
+                            <br><small class="text-muted">{{ contract.title }}</small>
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Overall Rating -->
+                        <div class="mb-4">
+                            <label class="form-label fw-medium">Overall Rating *</label>
+                            <div class="star-rating">
+                                {% for i in "54321" %}
+                                <input type="radio" id="star{{ i }}" name="overall_rating" value="{{ i }}" required>
+                                <label for="star{{ i }}" title="{{ i }} stars">
+                                    <i class="bi bi-star-fill"></i>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {% if review_type == 'client_to_freelancer' %}
+                        <!-- Ratings for Freelancer -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="quality_rating" class="form-label">Quality of Work</label>
+                                <select name="quality_rating" id="quality_rating" class="form-select">
+                                    <option value="">Select rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Below Average</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="communication_rating" class="form-label">Communication</label>
+                                <select name="communication_rating" id="communication_rating" class="form-select">
+                                    <option value="">Select rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Below Average</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="timeliness_rating" class="form-label">Timeliness</label>
+                                <select name="timeliness_rating" id="timeliness_rating" class="form-select">
+                                    <option value="">Select rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Below Average</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="professionalism_rating" class="form-label">Professionalism</label>
+                                <select name="professionalism_rating" id="professionalism_rating" class="form-select">
+                                    <option value="">Select rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Below Average</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- Ratings for Client -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="clarity_rating" class="form-label">Project Clarity</label>
+                                <select name="clarity_rating" id="clarity_rating" class="form-select">
+                                    <option value="">Select rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Below Average</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="communication_rating" class="form-label">Communication</label>
+                                <select name="communication_rating" id="communication_rating" class="form-select">
+                                    <option value="">Select rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Below Average</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="payment_rating" class="form-label">Payment Timeliness</label>
+                                <select name="payment_rating" id="payment_rating" class="form-select">
+                                    <option value="">Select rating</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Below Average</option>
+                                    <option value="1">⭐ Poor</option>
+                                </select>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Comment -->
+                        <div class="mb-4">
+                            <label for="comment" class="form-label fw-medium">Your Review *</label>
+                            <textarea name="comment" id="comment" class="form-control" rows="5" required
+                                      placeholder="Share your experience working with {{ reviewee.get_full_name|default:reviewee.username }}. What went well? Any areas for improvement?"></textarea>
+                            <small class="text-muted">Minimum 50 characters</small>
+                        </div>
+
+                        <div class="alert alert-info mb-4">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Your review will be visible to others after {{ reviewee.first_name|default:'they' }} submit{% if reviewee.first_name %}s{% endif %} their review, or after 14 days.
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-star me-2"></i>Submit Review
+                            </button>
+                            <a href="{% url 'contracts:detail' pk=contract.pk %}" class="btn btn-outline-secondary">
+                                Skip for Now
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

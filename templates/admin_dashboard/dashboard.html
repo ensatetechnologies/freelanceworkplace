@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold mb-2">Admin Dashboard</h2>
+            <p class="text-muted">Platform overview and management</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1 opacity-75">Total Users</p>
+                            <h2 class="fw-bold mb-0">{{ total_users }}</h2>
+                            <small class="opacity-75">{{ new_users_today }} new today</small>
+                        </div>
+                        <i class="bi bi-people fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1 opacity-75">Total Projects</p>
+                            <h2 class="fw-bold mb-0">{{ total_projects }}</h2>
+                            <small class="opacity-75">{{ active_projects }} active</small>
+                        </div>
+                        <i class="bi bi-briefcase fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm bg-warning text-dark">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1 opacity-75">Active Contracts</p>
+                            <h2 class="fw-bold mb-0">{{ active_contracts }}</h2>
+                            <small class="opacity-75">${{ contracts_value|floatformat:0 }} total value</small>
+                        </div>
+                        <i class="bi bi-file-earmark-text fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-1 opacity-75">Total Revenue</p>
+                            <h2 class="fw-bold mb-0">${{ total_revenue|floatformat:0 }}</h2>
+                            <small class="opacity-75">${{ revenue_this_month|floatformat:0 }} this month</small>
+                        </div>
+                        <i class="bi bi-currency-dollar fs-1 opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Activity -->
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">Recent Activity</h5>
+                        <a href="{% url 'admin_dashboard:reports' %}" class="btn btn-outline-primary btn-sm">View Reports</a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for activity in recent_activities %}
+                        <div class="list-group-item p-3">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    {% if activity.type == 'user' %}
+                                        <div class="bg-primary-subtle rounded-circle p-2">
+                                            <i class="bi bi-person text-primary"></i>
+                                        </div>
+                                    {% elif activity.type == 'project' %}
+                                        <div class="bg-success-subtle rounded-circle p-2">
+                                            <i class="bi bi-briefcase text-success"></i>
+                                        </div>
+                                    {% elif activity.type == 'contract' %}
+                                        <div class="bg-warning-subtle rounded-circle p-2">
+                                            <i class="bi bi-file-text text-warning"></i>
+                                        </div>
+                                    {% elif activity.type == 'payment' %}
+                                        <div class="bg-info-subtle rounded-circle p-2">
+                                            <i class="bi bi-cash text-info"></i>
+                                        </div>
+                                    {% else %}
+                                        <div class="bg-secondary-subtle rounded-circle p-2">
+                                            <i class="bi bi-activity text-secondary"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="mb-1">{{ activity.description }}</p>
+                                    <small class="text-muted">{{ activity.created_at|timesince }} ago</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-5">
+                            <p class="text-muted mb-0">No recent activity</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & Pending Items -->
+        <div class="col-lg-4 mb-4">
+            <!-- Quick Actions -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'admin_dashboard:users' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-people me-2"></i>Manage Users
+                        </a>
+                        <a href="{% url 'admin_dashboard:projects' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-briefcase me-2"></i>Manage Projects
+                        </a>
+                        <a href="{% url 'admin_dashboard:withdrawals' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-cash me-2"></i>Process Withdrawals
+                        </a>
+                        <a href="{% url 'admin_dashboard:categories' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-tags me-2"></i>Manage Categories
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Items -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Pending Actions</h5>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'admin_dashboard:withdrawals' %}?status=pending" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-cash-stack text-warning me-2"></i>Pending Withdrawals</span>
+                            <span class="badge bg-warning rounded-pill">{{ pending_withdrawals }}</span>
+                        </a>
+                        <a href="{% url 'admin_dashboard:contracts' %}?status=disputed" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-exclamation-triangle text-danger me-2"></i>Disputed Contracts</span>
+                            <span class="badge bg-danger rounded-pill">{{ disputed_contracts }}</span>
+                        </a>
+                        <a href="{% url 'admin_dashboard:users' %}?verified=false" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-person-check text-info me-2"></i>Unverified Users</span>
+                            <span class="badge bg-info rounded-pill">{{ unverified_users }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Users & Projects Tables -->
+    <div class="row">
+        <!-- Recent Users -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">Recent Users</h5>
+                        <a href="{% url 'admin_dashboard:users' %}" class="btn btn-link btn-sm">View All</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recent_users %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if user.avatar %}
+                                            <img src="{{ user.avatar.url }}" class="rounded-circle me-2" width="32" height="32">
+                                        {% else %}
+                                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2"
+                                                 style="width: 32px; height: 32px;">
+                                                <span class="text-white small">{{ user.first_name|slice:":1"|upper }}</span>
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <span class="fw-medium">{{ user.get_full_name|default:user.username }}</span>
+                                            <br><small class="text-muted">{{ user.email }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge bg-secondary">{{ user.get_role_display }}</span></td>
+                                <td><small>{{ user.date_joined|date:"M d" }}</small></td>
+                                <td>
+                                    {% if user.is_verified %}
+                                        <span class="badge bg-success">Verified</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-3 text-muted">No recent users</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Projects -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">Recent Projects</h5>
+                        <a href="{% url 'admin_dashboard:projects' %}" class="btn btn-link btn-sm">View All</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Project</th>
+                                <th>Budget</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in recent_projects %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'projects:detail' slug=project.slug %}" class="text-decoration-none">
+                                        {{ project.title|truncatechars:30 }}
+                                    </a>
+                                    <br><small class="text-muted">by {{ project.client.get_full_name|default:project.client.username }}</small>
+                                </td>
+                                <td>${{ project.budget_min }} - ${{ project.budget_max }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if project.status == 'open' %}bg-success
+                                        {% elif project.status == 'in_progress' %}bg-info
+                                        {% elif project.status == 'completed' %}bg-primary
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ project.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-3 text-muted">No recent projects</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Transaction History - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'payments:wallet' %}">Wallet</a></li>
+                    <li class="breadcrumb-item active">Transactions</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-2">Transaction History</h2>
+            <p class="text-muted">View all your payment transactions</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Filters -->
+        <div class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Filter by Type</h6>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'payments:transactions' %}" 
+                           class="list-group-item list-group-item-action {% if not request.GET.type %}active{% endif %}">
+                            All Transactions
+                        </a>
+                        <a href="?type=milestone_release" 
+                           class="list-group-item list-group-item-action {% if request.GET.type == 'milestone_release' %}active{% endif %}">
+                            <i class="bi bi-arrow-down-circle text-success me-2"></i>Payments Received
+                        </a>
+                        <a href="?type=withdrawal" 
+                           class="list-group-item list-group-item-action {% if request.GET.type == 'withdrawal' %}active{% endif %}">
+                            <i class="bi bi-arrow-up-circle text-danger me-2"></i>Withdrawals
+                        </a>
+                        <a href="?type=escrow_fund" 
+                           class="list-group-item list-group-item-action {% if request.GET.type == 'escrow_fund' %}active{% endif %}">
+                            <i class="bi bi-lock text-info me-2"></i>Escrow Payments
+                        </a>
+                        <a href="?type=refund" 
+                           class="list-group-item list-group-item-action {% if request.GET.type == 'refund' %}active{% endif %}">
+                            <i class="bi bi-arrow-counterclockwise text-warning me-2"></i>Refunds
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Filter by Status</h6>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'payments:transactions' %}{% if request.GET.type %}?type={{ request.GET.type }}{% endif %}" 
+                           class="list-group-item list-group-item-action {% if not request.GET.status %}active{% endif %}">
+                            All Status
+                        </a>
+                        <a href="?status=completed{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}" 
+                           class="list-group-item list-group-item-action {% if request.GET.status == 'completed' %}active{% endif %}">
+                            <span class="badge bg-success me-2">●</span>Completed
+                        </a>
+                        <a href="?status=pending{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}" 
+                           class="list-group-item list-group-item-action {% if request.GET.status == 'pending' %}active{% endif %}">
+                            <span class="badge bg-warning me-2">●</span>Pending
+                        </a>
+                        <a href="?status=processing{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}" 
+                           class="list-group-item list-group-item-action {% if request.GET.status == 'processing' %}active{% endif %}">
+                            <span class="badge bg-info me-2">●</span>Processing
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions List -->
+        <div class="col-lg-9">
+            {% if transactions %}
+            <div class="card border-0 shadow-sm">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Transaction</th>
+                                <th>Date</th>
+                                <th class="text-end">Amount</th>
+                                <th class="text-end">Fee</th>
+                                <th class="text-end">Net</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if transaction.type == 'milestone_release' %}
+                                            <div class="bg-success-subtle rounded-circle p-2 me-3">
+                                                <i class="bi bi-arrow-down text-success"></i>
+                                            </div>
+                                        {% elif transaction.type == 'withdrawal' %}
+                                            <div class="bg-danger-subtle rounded-circle p-2 me-3">
+                                                <i class="bi bi-arrow-up text-danger"></i>
+                                            </div>
+                                        {% elif transaction.type == 'escrow_fund' %}
+                                            <div class="bg-info-subtle rounded-circle p-2 me-3">
+                                                <i class="bi bi-lock text-info"></i>
+                                            </div>
+                                        {% elif transaction.type == 'refund' %}
+                                            <div class="bg-warning-subtle rounded-circle p-2 me-3">
+                                                <i class="bi bi-arrow-counterclockwise text-warning"></i>
+                                            </div>
+                                        {% else %}
+                                            <div class="bg-secondary-subtle rounded-circle p-2 me-3">
+                                                <i class="bi bi-circle text-secondary"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <span class="fw-medium">{{ transaction.get_type_display }}</span>
+                                            {% if transaction.contract %}
+                                            <br><small class="text-muted">{{ transaction.contract.title|truncatechars:30 }}</small>
+                                            {% endif %}
+                                            {% if transaction.description %}
+                                            <br><small class="text-muted">{{ transaction.description }}</small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span>{{ transaction.created_at|date:"M d, Y" }}</span>
+                                    <br><small class="text-muted">{{ transaction.created_at|time:"g:i A" }}</small>
+                                </td>
+                                <td class="text-end">
+                                    <span class="{% if transaction.type == 'withdrawal' %}text-danger{% else %}text-dark{% endif %}">
+                                        ${{ transaction.amount|floatformat:2 }}
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <span class="text-muted">
+                                        {% if transaction.fee > 0 %}-${{ transaction.fee|floatformat:2 }}{% else %}-{% endif %}
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <strong class="{% if transaction.type == 'withdrawal' %}text-danger{% else %}text-success{% endif %}">
+                                        {% if transaction.type == 'withdrawal' %}-{% endif %}${{ transaction.net_amount|floatformat:2 }}
+                                    </strong>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge 
+                                        {% if transaction.status == 'completed' %}bg-success
+                                        {% elif transaction.status == 'pending' %}bg-warning
+                                        {% elif transaction.status == 'processing' %}bg-info
+                                        {% elif transaction.status == 'failed' %}bg-danger
+                                        {% elif transaction.status == 'refunded' %}bg-secondary
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ transaction.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav class="mt-4" aria-label="Transactions pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+            {% else %}
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-receipt text-muted" style="font-size: 4rem;"></i>
+                    <h4 class="mt-3">No Transactions Found</h4>
+                    <p class="text-muted">
+                        {% if request.GET.type or request.GET.status %}
+                            No transactions match your filter criteria.
+                        {% else %}
+                            You don't have any transactions yet.
+                        {% endif %}
+                    </p>
+                    {% if request.GET.type or request.GET.status %}
+                    <a href="{% url 'payments:transactions' %}" class="btn btn-outline-primary">
+                        Clear Filters
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

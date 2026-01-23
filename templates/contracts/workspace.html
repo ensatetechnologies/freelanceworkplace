@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Workspace - {{ contract.title }} - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .milestone-card {
+        transition: all 0.2s ease;
+    }
+    .milestone-card:hover {
+        transform: translateY(-2px);
+    }
+    .deliverable-item {
+        border-left: 3px solid #dee2e6;
+        transition: border-color 0.2s ease;
+    }
+    .deliverable-item:hover {
+        border-left-color: #0d6efd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">Contracts</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'contracts:detail' pk=contract.pk %}">{{ contract.title|truncatechars:30 }}</a></li>
+                            <li class="breadcrumb-item active">Workspace</li>
+                        </ol>
+                    </nav>
+                    <h3 class="fw-bold mb-0">{{ contract.title }}</h3>
+                </div>
+                <div class="d-flex gap-2">
+                    <span class="badge fs-6 
+                        {% if contract.status == 'active' %}bg-success
+                        {% elif contract.status == 'completed' %}bg-primary
+                        {% elif contract.status == 'paused' %}bg-warning
+                        {% else %}bg-secondary{% endif %}">
+                        {{ contract.get_status_display }}
+                    </span>
+                    <a href="{% url 'contracts:detail' pk=contract.pk %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-info-circle me-1"></i>Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Milestones Board -->
+        <div class="col-lg-9 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">
+                            <i class="bi bi-kanban me-2 text-primary"></i>Milestones Board
+                        </h5>
+                        {% if request.user == contract.client and contract.status == 'active' %}
+                        <a href="{% url 'contracts:add_milestone' pk=contract.pk %}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg me-1"></i>Add Milestone
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if contract.milestones.exists %}
+                    <div class="row g-3">
+                        {% for milestone in contract.milestones.all %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card milestone-card h-100 border-{% if milestone.status == 'paid' %}success{% elif milestone.status == 'approved' %}info{% elif milestone.status == 'submitted' %}warning{% else %}secondary{% endif %}">
+                                <div class="card-header bg-{% if milestone.status == 'paid' %}success{% elif milestone.status == 'approved' %}info{% elif milestone.status == 'submitted' %}warning{% else %}light{% endif %} {% if milestone.status in 'paid,approved,submitted' %}text-white{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-white text-dark">M{{ forloop.counter }}</span>
+                                        <small>{{ milestone.get_status_display }}</small>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title fw-bold">{{ milestone.title }}</h6>
+                                    <p class="card-text small text-muted">{{ milestone.description|truncatechars:80 }}</p>
+                                    
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span class="text-primary fw-bold">${{ milestone.amount }}</span>
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar me-1"></i>{{ milestone.due_date|date:"M d" }}
+                                        </small>
+                                    </div>
+
+                                    <!-- Deliverables -->
+                                    {% if milestone.deliverables.exists %}
+                                    <div class="border-top pt-2 mt-2">
+                                        <small class="text-muted fw-bold">Deliverables:</small>
+                                        <ul class="list-unstyled mt-1 mb-0">
+                                            {% for deliverable in milestone.deliverables.all|slice:":3" %}
+                                            <li class="small">
+                                                <i class="bi bi-file-earmark me-1 text-muted"></i>
+                                                {{ deliverable.title|truncatechars:20 }}
+                                            </li>
+                                            {% endfor %}
+                                            {% if milestone.deliverables.count > 3 %}
+                                            <li class="small text-muted">+{{ milestone.deliverables.count|add:"-3" }} more</li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    {% if request.user == contract.freelancer %}
+                                        {% if milestone.status == 'pending' %}
+                                        <form method="post" action="{% url 'contracts:start_milestone' pk=milestone.pk %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-outline-primary btn-sm w-100">
+                                                <i class="bi bi-play me-1"></i>Start Work
+                                            </button>
+                                        </form>
+                                        {% elif milestone.status == 'in_progress' %}
+                                        <div class="d-grid gap-1">
+                                            <a href="{% url 'contracts:upload_deliverable' pk=milestone.pk %}" class="btn btn-outline-secondary btn-sm">
+                                                <i class="bi bi-upload me-1"></i>Upload File
+                                            </a>
+                                            <form method="post" action="{% url 'contracts:submit_milestone' pk=milestone.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm w-100">
+                                                    <i class="bi bi-check-lg me-1"></i>Submit
+                                                </button>
+                                            </form>
+                                        </div>
+                                        {% elif milestone.status == 'revision' %}
+                                        <span class="badge bg-warning w-100 py-2">Revision Requested</span>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% if request.user == contract.client %}
+                                        {% if milestone.status == 'submitted' %}
+                                        <div class="d-grid gap-1">
+                                            <form method="post" action="{% url 'contracts:approve_milestone' pk=milestone.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm w-100">
+                                                    <i class="bi bi-check-lg me-1"></i>Approve
+                                                </button>
+                                            </form>
+                                            <form method="post" action="{% url 'contracts:request_revision' pk=milestone.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-outline-warning btn-sm w-100">
+                                                    <i class="bi bi-arrow-repeat me-1"></i>Revision
+                                                </button>
+                                            </form>
+                                        </div>
+                                        {% elif milestone.status == 'approved' %}
+                                        <a href="{% url 'payments:release_milestone' pk=milestone.pk %}" class="btn btn-primary btn-sm w-100">
+                                            <i class="bi bi-cash me-1"></i>Release Payment
+                                        </a>
+                                        {% elif milestone.status == 'paid' %}
+                                        <span class="badge bg-success w-100 py-2">
+                                            <i class="bi bi-check-circle me-1"></i>Payment Released
+                                        </span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-list-task text-muted" style="font-size: 4rem;"></i>
+                        <h5 class="mt-3">No Milestones Yet</h5>
+                        <p class="text-muted">
+                            {% if request.user == contract.client %}
+                                Create milestones to break down the project into manageable tasks.
+                            {% else %}
+                                Waiting for the client to create milestones for this project.
+                            {% endif %}
+                        </p>
+                        {% if request.user == contract.client %}
+                        <a href="{% url 'contracts:add_milestone' pk=contract.pk %}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i>Add First Milestone
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <!-- Progress -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Progress</h6>
+                    <div class="progress mb-2" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: {{ progress_percent|default:0 }}%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between small">
+                        <span>{{ completed_milestones }}/{{ total_milestones }} milestones</span>
+                        <span class="fw-bold">{{ progress_percent|default:0 }}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Contract Value</h6>
+                    <div class="h3 text-primary mb-0">${{ contract.total_amount }}</div>
+                    <hr>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="text-success fw-bold">${{ released_amount|default:0 }}</div>
+                            <small class="text-muted">Released</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-info fw-bold">${{ escrow_balance|default:0 }}</div>
+                            <small class="text-muted">In Escrow</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Party -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">
+                        {% if request.user == contract.client %}Freelancer{% else %}Client{% endif %}
+                    </h6>
+                    {% with other_user=request.user|yesno:"contract.freelancer,contract.client" %}
+                    <div class="d-flex align-items-center">
+                        {% if request.user == contract.client %}
+                            {% if contract.freelancer.avatar %}
+                                <img src="{{ contract.freelancer.avatar.url }}" class="rounded-circle me-3" width="50" height="50">
+                            {% else %}
+                                <div class="rounded-circle bg-success d-flex align-items-center justify-content-center me-3"
+                                     style="width: 50px; height: 50px;">
+                                    <span class="text-white fw-bold">{{ contract.freelancer.first_name|slice:":1"|upper }}</span>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <strong>{{ contract.freelancer.get_full_name|default:contract.freelancer.username }}</strong>
+                                <br><small class="text-muted">Freelancer</small>
+                            </div>
+                        {% else %}
+                            {% if contract.client.avatar %}
+                                <img src="{{ contract.client.avatar.url }}" class="rounded-circle me-3" width="50" height="50">
+                            {% else %}
+                                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center me-3"
+                                     style="width: 50px; height: 50px;">
+                                    <span class="text-white fw-bold">{{ contract.client.first_name|slice:":1"|upper }}</span>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <strong>{{ contract.client.get_full_name|default:contract.client.username }}</strong>
+                                <br><small class="text-muted">Client</small>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endwith %}
+                    <a href="{% url 'messaging:start' %}?recipient={% if request.user == contract.client %}{{ contract.freelancer.pk }}{% else %}{{ contract.client.pk }}{% endif %}" 
+                       class="btn btn-outline-primary btn-sm w-100 mt-3">
+                        <i class="bi bi-chat me-1"></i>Send Message
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Quick Actions</h6>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'contracts:detail' pk=contract.pk %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-info-circle me-1"></i>View Details
+                        </a>
+                        {% if request.user == contract.client and contract.status == 'active' %}
+                        <a href="{% url 'payments:fund_escrow' pk=contract.pk %}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-cash me-1"></i>Fund Escrow
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

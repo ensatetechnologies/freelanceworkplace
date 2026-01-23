@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Wallet - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold mb-2">My Wallet</h2>
+            <p class="text-muted">Manage your earnings and withdrawals</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Balance Cards -->
+        <div class="col-lg-8 mb-4">
+            <div class="row g-3 mb-4">
+                <!-- Available Balance -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm bg-primary text-white h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="mb-1 opacity-75">Available Balance</p>
+                                    <h2 class="fw-bold mb-0">${{ wallet.balance|floatformat:2 }}</h2>
+                                </div>
+                                <i class="bi bi-wallet2 fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Balance -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm bg-warning text-dark h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="mb-1 opacity-75">Pending</p>
+                                    <h2 class="fw-bold mb-0">${{ wallet.pending_balance|floatformat:2 }}</h2>
+                                </div>
+                                <i class="bi bi-hourglass-split fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Earned -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm bg-success text-white h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="mb-1 opacity-75">Total Earned</p>
+                                    <h2 class="fw-bold mb-0">${{ wallet.total_earned|floatformat:2 }}</h2>
+                                </div>
+                                <i class="bi bi-graph-up-arrow fs-1 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">Recent Transactions</h5>
+                        <a href="{% url 'payments:transactions' %}" class="btn btn-outline-primary btn-sm">View All</a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if transactions %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaction in transactions %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if transaction.type == 'milestone_release' %}
+                                                <i class="bi bi-arrow-down-circle text-success fs-5 me-2"></i>
+                                            {% elif transaction.type == 'withdrawal' %}
+                                                <i class="bi bi-arrow-up-circle text-danger fs-5 me-2"></i>
+                                            {% elif transaction.type == 'escrow_fund' %}
+                                                <i class="bi bi-lock text-info fs-5 me-2"></i>
+                                            {% else %}
+                                                <i class="bi bi-circle text-secondary fs-5 me-2"></i>
+                                            {% endif %}
+                                            <div>
+                                                <span class="fw-medium">{{ transaction.get_type_display }}</span>
+                                                {% if transaction.contract %}
+                                                <br><small class="text-muted">{{ transaction.contract.title|truncatechars:30 }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span>{{ transaction.created_at|date:"M d, Y" }}</span>
+                                        <br><small class="text-muted">{{ transaction.created_at|time:"g:i A" }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold {% if transaction.type == 'withdrawal' %}text-danger{% else %}text-success{% endif %}">
+                                            {% if transaction.type == 'withdrawal' %}-{% else %}+{% endif %}${{ transaction.net_amount|floatformat:2 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if transaction.status == 'completed' %}bg-success
+                                            {% elif transaction.status == 'pending' %}bg-warning
+                                            {% elif transaction.status == 'processing' %}bg-info
+                                            {% elif transaction.status == 'failed' %}bg-danger
+                                            {% else %}bg-secondary{% endif %}">
+                                            {{ transaction.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-receipt text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-2">No transactions yet</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Withdraw -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Withdraw Funds</h5>
+                    <p class="text-muted small">Transfer your available balance to your bank account</p>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Available</span>
+                            <strong>${{ wallet.balance|floatformat:2 }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Min. withdrawal</span>
+                            <span>$50.00</span>
+                        </div>
+                    </div>
+
+                    {% if wallet.balance >= 50 %}
+                    <a href="{% url 'payments:withdraw' %}" class="btn btn-primary w-100">
+                        <i class="bi bi-bank me-2"></i>Request Withdrawal
+                    </a>
+                    {% else %}
+                    <button class="btn btn-secondary w-100" disabled>
+                        <i class="bi bi-bank me-2"></i>Min. $50 Required
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Payment Setup -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Payment Setup</h5>
+                    {% if wallet.stripe_account_verified %}
+                    <div class="d-flex align-items-center text-success mb-3">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <span>Bank account connected</span>
+                    </div>
+                    <a href="#" class="btn btn-outline-secondary btn-sm w-100">
+                        <i class="bi bi-gear me-2"></i>Manage Payment Method
+                    </a>
+                    {% else %}
+                    <div class="d-flex align-items-center text-warning mb-3">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span>No payment method</span>
+                    </div>
+                    <p class="text-muted small">Connect your bank account to receive payments</p>
+                    <a href="#" class="btn btn-primary btn-sm w-100">
+                        <i class="bi bi-plus-lg me-2"></i>Add Payment Method
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Statistics</h5>
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Total Withdrawn</span>
+                            <strong>${{ wallet.total_withdrawn|floatformat:2 }}</strong>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Pending Withdrawals</span>
+                            <strong>{{ pending_withdrawals_count }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

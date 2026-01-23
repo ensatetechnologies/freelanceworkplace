@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Milestone - {{ contract.title }} - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'contracts:list' %}">Contracts</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'contracts:detail' pk=contract.pk %}">{{ contract.title|truncatechars:30 }}</a></li>
+                    <li class="breadcrumb-item active">Add Milestone</li>
+                </ol>
+            </nav>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4">
+                        <i class="bi bi-flag me-2 text-primary"></i>Add New Milestone
+                    </h4>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="id_title" class="form-label fw-medium">Milestone Title</label>
+                            <input type="text" name="title" id="id_title" class="form-control" 
+                                   placeholder="e.g., Design Phase, Development Sprint 1" required
+                                   value="{{ form.title.value|default:'' }}">
+                            {% if form.title.errors %}
+                                <div class="text-danger small">{{ form.title.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_description" class="form-label fw-medium">Description</label>
+                            <textarea name="description" id="id_description" class="form-control" rows="4"
+                                      placeholder="Describe what needs to be delivered in this milestone...">{{ form.description.value|default:'' }}</textarea>
+                            {% if form.description.errors %}
+                                <div class="text-danger small">{{ form.description.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="id_amount" class="form-label fw-medium">Amount ($)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" name="amount" id="id_amount" class="form-control"
+                                           placeholder="0.00" step="0.01" min="1" required
+                                           value="{{ form.amount.value|default:'' }}">
+                                </div>
+                                <small class="text-muted">Contract total: ${{ contract.total_amount }}</small>
+                                {% if form.amount.errors %}
+                                    <div class="text-danger small">{{ form.amount.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label for="id_due_date" class="form-label fw-medium">Due Date</label>
+                                <input type="date" name="due_date" id="id_due_date" class="form-control" required
+                                       value="{{ form.due_date.value|default:'' }}">
+                                {% if form.due_date.errors %}
+                                    <div class="text-danger small">{{ form.due_date.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'contracts:detail' pk=contract.pk %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-plus-lg me-2"></i>Add Milestone
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
