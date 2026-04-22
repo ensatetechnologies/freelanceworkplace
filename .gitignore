@@ -152,3 +152,7 @@ logs/
 *.pem
 *.key
 secrets/
+logins
+
+# Word-generated companion folders (auto-created when opening .doc files)
+docs/*_files/

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Messages - {{ PLATFORM_NAME }}{% endblock %}
 
@@ -44,7 +45,7 @@
                                             </h6>
                                             {% if conversation.last_message_at %}
                                             <small class="text-muted">
-                                                {{ conversation.last_message_at|timesince:"d" }}
+                                                {{ conversation.last_message_at|naturaltime }}
                                             </small>
                                             {% endif %}
                                         </div>

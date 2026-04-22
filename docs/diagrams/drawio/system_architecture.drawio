@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" modified="2026-04-22T00:00:00.000Z" agent="FreelanceMarketPlace" version="22.0.0">
+  <diagram name="System Architecture" id="sys-arch">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="FreelanceMarketPlace — 3-Tier System Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="20" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="presentation" value="Presentation Tier&#10;(Browser: HTML5 + Bootstrap 5 + JS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="90" width="900" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="app" value="Application Tier — Django 5.0&#10;Views · Forms · Templates · Allauth · DRF · Channels-style Polling" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="220" width="900" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="apps" value="apps/&#10;accounts · projects · proposals · contracts · messaging · payments · reviews · notifications · admin_dashboard · core" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#047857;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="130" y="260" width="840" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mw" value="Middleware: Auth · CSRF · Sessions · Security · Locale" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#047857;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="130" y="325" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="api" value="REST API (DRF) — /api/v1/*" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#047857;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="325" width="410" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="media" value="Media / Static Files (local FS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#c2410c;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="130" y="380" width="400" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="email" value="Email Backend (console/SMTP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#c2410c;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="560" y="380" width="410" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="data" value="Data Tier — MySQL 8.0&#10;(utf8mb4) — Users · Projects · Proposals · Contracts · Milestones · Messages · Payments · Reviews · Notifications" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0369a1;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="490" width="900" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#047857;strokeWidth=2;" edge="1" parent="1" source="presentation" target="app">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;strokeColor=#0369a1;strokeWidth=2;" edge="1" parent="1" source="app" target="data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

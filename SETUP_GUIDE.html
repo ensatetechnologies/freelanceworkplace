@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freelance Marketplace &mdash; Setup Guide</title>
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-soft: #d1fae5;
+            --accent: #f97316;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --muted: #475569;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --code-fg: #e2e8f0;
+            --code-inline-bg: #f1f5f9;
+            --code-inline-fg: #047857;
+            --warn-bg: #fef3c7;
+            --warn-border: #f59e0b;
+            --danger-bg: #fee2e2;
+            --danger-border: #ef4444;
+            --info-bg: #ecfdf5;
+            --info-border: #059669;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+        }
+
+        header.hero {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            padding: 3rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .hero .container { padding: 0 1.5rem; }
+
+        h1 {
+            margin: 0 0 .25rem;
+            font-size: 2.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            margin: .25rem 0 1rem;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .badge-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+        .badge {
+            display: inline-block;
+            background: var(--surface);
+            color: var(--primary-dark);
+            border: 1px solid var(--primary-soft);
+            padding: .3rem .7rem;
+            border-radius: 999px;
+            font-size: .8rem;
+            font-weight: 600;
+        }
+
+        h2 {
+            margin-top: 2.5rem;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--primary);
+            padding-left: .75rem;
+            color: var(--primary-dark);
+        }
+
+        h3 { margin-top: 1.75rem; font-size: 1.1rem; color: var(--text); }
+
+        p, li { color: var(--text); }
+
+        ol, ul { padding-left: 1.25rem; }
+        ol > li { margin-bottom: 1rem; }
+
+        a { color: var(--primary-dark); }
+        a:hover { color: var(--primary); }
+
+        code {
+            background: var(--code-inline-bg);
+            color: var(--code-inline-fg);
+            padding: .1rem .35rem;
+            border-radius: .3rem;
+            font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-fg);
+            padding: 1rem 1.1rem;
+            border-radius: .65rem;
+            overflow-x: auto;
+            position: relative;
+            margin: .5rem 0 1rem;
+            font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 1em;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: .5rem;
+            right: .5rem;
+            background: rgba(255,255,255,0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: .4rem;
+            padding: .2rem .55rem;
+            font-size: .72rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background .15s;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.18); }
+        .copy-btn.copied { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+        .callout {
+            border-left: 4px solid var(--info-border);
+            background: var(--info-bg);
+            padding: .85rem 1rem;
+            border-radius: .5rem;
+            margin: 1rem 0;
+        }
+        .callout.warn  { border-left-color: var(--warn-border);  background: var(--warn-bg); }
+        .callout.danger{ border-left-color: var(--danger-border);background: var(--danger-bg); }
+        .callout strong { color: var(--primary-dark); }
+        .callout.warn strong { color: #92400e; }
+        .callout.danger strong { color: #991b1b; }
+
+        .login-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: .75rem;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,.04);
+        }
+        .login-card table { width: 100%; border-collapse: collapse; }
+        .login-card td {
+            padding: .4rem .25rem;
+            border-bottom: 1px dashed var(--border);
+            font-size: .95rem;
+        }
+        .login-card tr:last-child td { border-bottom: none; }
+        .login-card td:first-child { color: var(--muted); width: 9rem; font-weight: 600; }
+
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: .65rem;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0 2rem;
+        }
+        .toc h3 { margin: 0 0 .5rem; font-size: .95rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+        .toc ol { margin: 0; padding-left: 1.1rem; }
+        .toc li { margin: .15rem 0; }
+
+        footer {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: .85rem;
+            border-top: 1px solid var(--border);
+        }
+
+        kbd {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: .25rem;
+            padding: 0 .35rem;
+            font-family: inherit;
+            font-size: .85em;
+            box-shadow: 0 1px 0 #cbd5e1;
+        }
+
+        .accent { color: var(--primary-dark); font-weight: 600; }
+    </style>
+</head>
+<body>
+<header class="hero">
+    <div class="container">
+        <div class="badge-row" style="margin-bottom: .75rem;">
+            <span class="badge">Django 5.0</span>
+            <span class="badge">Python 3.11+</span>
+            <span class="badge">MySQL 8 / SQLite</span>
+            <span class="badge">Bootstrap 5</span>
+        </div>
+        <h1>Freelance Marketplace &mdash; Setup Guide</h1>
+        <p>Everything you need to clone <a href="https://github.com/ensatetechnologies/freelanceworkplace" target="_blank" rel="noopener">ensatetechnologies/freelanceworkplace</a> and run it on a fresh machine.</p>
+    </div>
+</header>
+
+<main class="container">
+    <div class="toc">
+        <h3>On this page</h3>
+        <ol>
+            <li><a href="#prereq">Prerequisites</a></li>
+            <li><a href="#clone">Clone the repository</a></li>
+            <li><a href="#venv">Create a virtual environment</a></li>
+            <li><a href="#deps">Install dependencies</a></li>
+            <li><a href="#env">Configure environment variables</a></li>
+            <li><a href="#db">Create the database</a></li>
+            <li><a href="#migrate">Run migrations &amp; load fixtures</a></li>
+            <li><a href="#super">Create / verify a superuser</a></li>
+            <li><a href="#run">Start the development server</a></li>
+            <li><a href="#logins">Demo login credentials</a></li>
+            <li><a href="#trouble">Troubleshooting</a></li>
+        </ol>
+    </div>
+
+    <h2 id="prereq">1. Prerequisites</h2>
+    <ul>
+        <li><span class="accent">Python 3.11+</span> (tested on 3.13 too) &mdash; <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a></li>
+        <li><span class="accent">Git</span> &mdash; <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com</a></li>
+        <li>Either <span class="accent">MySQL 8.0</span> (recommended, matches production) <em>or</em> the built-in <span class="accent">SQLite</span> for quick local use</li>
+        <li>A C/C++ build toolchain if you install <code>mysqlclient</code> from source (Windows: &ldquo;Microsoft C++ Build Tools&rdquo;; Debian/Ubuntu: <code>sudo apt install build-essential python3-dev default-libmysqlclient-dev pkg-config</code>)</li>
+    </ul>
+
+    <h2 id="clone">2. Clone the repository</h2>
+<pre><button class="copy-btn" data-copy>Copy</button><code>git clone https://github.com/ensatetechnologies/freelanceworkplace.git
+cd freelanceworkplace</code></pre>
+
+    <h2 id="venv">3. Create a virtual environment</h2>
+    <p><strong>Windows (PowerShell):</strong></p>
+<pre><button class="copy-btn" data-copy>Copy</button><code>python -m venv venv
+venv\Scripts\Activate.ps1</code></pre>
+    <p>If PowerShell blocks activation: <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>.</p>
+
+    <p><strong>macOS / Linux:</strong></p>
+<pre><button class="copy-btn" data-copy>Copy</button><code>python3 -m venv venv
+source venv/bin/activate</code></pre>
+
+    <h2 id="deps">4. Install dependencies</h2>
+<pre><button class="copy-btn" data-copy>Copy</button><code>pip install --upgrade pip
+pip install -r requirements.txt</code></pre>
+
+    <div class="callout warn">
+        <strong>Windows hint:</strong> if <code>mysqlclient</code> fails to build, install a prebuilt wheel: <code>pip install mysqlclient</code> usually works on 3.11/3.12, or download the matching wheel from <a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/" target="_blank" rel="noopener">Gohlke&rsquo;s archive</a>. Alternatively use SQLite (see step 6 below) and skip MySQL entirely.
+    </div>
+
+    <h2 id="env">5. Configure environment variables</h2>
+<pre><button class="copy-btn" data-copy>Copy</button><code># Windows PowerShell
+Copy-Item env.example .env
+
+# macOS / Linux
+cp env.example .env</code></pre>
+
+    <p>Open <code>.env</code> and set values for your machine:</p>
+<pre><button class="copy-btn" data-copy>Copy</button><code>DEBUG=1
+SECRET_KEY=change-me-to-a-long-random-string
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+DB_NAME=freelance_marketplace
+DB_USER=root
+DB_PASSWORD=your-mysql-root-password
+DB_HOST=localhost
+DB_PORT=3306
+
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+SITE_URL=http://localhost:8000</code></pre>
+
+    <h2 id="db">6. Create the database</h2>
+
+    <h3>Option A &mdash; MySQL (recommended)</h3>
+    <p>Log in to MySQL and create the database with proper collation:</p>
+<pre><button class="copy-btn" data-copy>Copy</button><code>CREATE DATABASE freelance_marketplace
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;</code></pre>
+
+    <h3>Option B &mdash; SQLite (zero-setup)</h3>
+    <p>Edit <code>config/settings/development.py</code> and replace the <code>DATABASES</code> block with:</p>
+<pre><button class="copy-btn" data-copy>Copy</button><code>DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}</code></pre>
+
+    <h2 id="migrate">7. Run migrations &amp; load fixtures</h2>
+<pre><button class="copy-btn" data-copy>Copy</button><code>python manage.py makemigrations
+python manage.py migrate
+python manage.py loaddata fixtures/initial_data.json</code></pre>
+
+    <h2 id="super">8. Create / verify a superuser</h2>
+    <p>If the fixture does <em>not</em> ship with an admin on the target machine, create one:</p>
+<pre><button class="copy-btn" data-copy>Copy</button><code>python manage.py createsuperuser</code></pre>
+
+    <p>Or create <em>/</em> reset one non-interactively to match the provided credentials:</p>
+<pre><button class="copy-btn" data-copy>Copy</button><code>python manage.py shell -c "from django.contrib.auth import get_user_model; U=get_user_model(); u,_=U.objects.get_or_create(username='admin', defaults={'email':'admin@example.com','role':'admin'}); u.is_superuser=True; u.is_staff=True; u.role='admin'; u.set_password('admin123'); u.save()"</code></pre>
+
+    <h2 id="run">9. Start the development server</h2>
+<pre><button class="copy-btn" data-copy>Copy</button><code>python manage.py runserver</code></pre>
+
+    <p>Then open:</p>
+    <ul>
+        <li>Main site &rarr; <a href="http://localhost:8000" target="_blank" rel="noopener">http://localhost:8000</a></li>
+        <li>Django admin &rarr; <a href="http://localhost:8000/admin" target="_blank" rel="noopener">http://localhost:8000/admin</a></li>
+        <li>Admin dashboard &rarr; <a href="http://localhost:8000/dashboard" target="_blank" rel="noopener">http://localhost:8000/dashboard</a></li>
+    </ul>
+
+    <h2 id="logins">10. Demo login credentials</h2>
+    <p>Use these to sign in as the platform administrator.</p>
+
+    <div class="login-card">
+        <table>
+            <tr><td>Username</td><td><code>admin</code></td></tr>
+            <tr><td>Email</td><td><code>admin@example.com</code></td></tr>
+            <tr><td>Password</td><td><code>admin123</code></td></tr>
+            <tr><td>Role</td><td>Superuser / Admin</td></tr>
+        </table>
+    </div>
+
+    <div class="callout danger">
+        <strong>Security warning:</strong> <code>admin123</code> is a development-only credential. Change it immediately on any shared or deployed environment with <code>python manage.py changepassword admin</code>.
+    </div>
+
+    <h2 id="trouble">11. Troubleshooting</h2>
+
+    <h3>Port 8000 already in use</h3>
+<pre><button class="copy-btn" data-copy>Copy</button><code># Windows: kill all Django runservers
+Get-CimInstance Win32_Process -Filter "Name='python.exe' AND CommandLine LIKE '%runserver%'" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
+
+# macOS / Linux
+lsof -ti:8000 | xargs kill -9</code></pre>
+
+    <h3><code>mysqlclient</code> fails to install</h3>
+    <ul>
+        <li>Install the OS-level MySQL client dev headers (see Prerequisites).</li>
+        <li>Or temporarily switch to SQLite (step 6 option B).</li>
+    </ul>
+
+    <h3>Static files look unstyled</h3>
+    <p>Hard-refresh with <kbd>Ctrl</kbd>+<kbd>F5</kbd>. In production runs, collect static files: <code>python manage.py collectstatic</code>.</p>
+
+    <h3>&ldquo;Template does not exist&rdquo; or template changes not showing</h3>
+    <p>Stop <em>all</em> <code>runserver</code> processes and relaunch a single one &mdash; stale processes can serve a cached view (see port 8000 snippet above).</p>
+
+    <h3>Migrations keep re-creating</h3>
+<pre><button class="copy-btn" data-copy>Copy</button><code>python manage.py migrate --fake-initial</code></pre>
+
+    <h3>Reset everything (SQLite)</h3>
+<pre><button class="copy-btn" data-copy>Copy</button><code>Remove-Item db.sqlite3  # or: rm db.sqlite3
+python manage.py migrate
+python manage.py loaddata fixtures/initial_data.json</code></pre>
+</main>
+
+<footer>
+    Freelance Marketplace &middot; Setup Guide &middot; Based on
+    <a href="https://github.com/ensatetechnologies/freelanceworkplace" target="_blank" rel="noopener">ensatetechnologies/freelanceworkplace</a>
+</footer>
+
+<script>
+    document.querySelectorAll('[data-copy]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var pre = btn.closest('pre');
+            var code = pre.querySelector('code');
+            if (!code) return;
+            navigator.clipboard.writeText(code.innerText).then(function () {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(function () {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        });
+    });
+</script>
+</body>
+</html>

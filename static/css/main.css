@@ -1,9 +1,12 @@
 /* Freelance Marketplace - Main Stylesheet */
 
-/* Custom Properties */
+/* Custom Properties - Emerald theme */
 :root {
-    --primary-color: #2563eb;
-    --primary-dark: #1d4ed8;
+    --primary-color: #059669;
+    --primary-dark: #047857;
+    --primary-rgb: 5, 150, 105;
+    --primary-soft: #d1fae5;
+    --accent-color: #f97316;
     --secondary-color: #64748b;
     --success-color: #10b981;
     --warning-color: #f59e0b;
@@ -16,7 +19,30 @@
     --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+    /* Bootstrap primary override so .btn-primary, .bg-primary, .text-primary,
+       .border-primary, .link-primary, form focus rings, etc. pick up the new theme. */
+    --bs-primary: #059669;
+    --bs-primary-rgb: 5, 150, 105;
+    --bs-primary-text-emphasis: #064e3b;
+    --bs-primary-bg-subtle: #d1fae5;
+    --bs-primary-border-subtle: #6ee7b7;
+    --bs-link-color: #059669;
+    --bs-link-color-rgb: 5, 150, 105;
+    --bs-link-hover-color: #047857;
+    --bs-link-hover-color-rgb: 4, 120, 87;
 }
+
+/* Make sure Bootstrap utility classes fully switch to the new primary */
+.bg-primary { background-color: var(--primary-color) !important; }
+.text-primary { color: var(--primary-color) !important; }
+.border-primary { border-color: var(--primary-color) !important; }
+.link-primary { color: var(--primary-color) !important; }
+.link-primary:hover, .link-primary:focus { color: var(--primary-dark) !important; }
+a { color: var(--primary-color); }
+a:hover { color: var(--primary-dark); }
+.bg-primary-subtle { background-color: var(--primary-soft) !important; }
+.text-bg-primary { background-color: var(--primary-color) !important; color: #fff !important; }
 
 /* Base Styles */
 body {
@@ -53,7 +79,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
 }
 
 .min-vh-50 {
@@ -138,7 +164,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-control:focus, .form-select:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
 }
 
 /* Alerts */
@@ -207,8 +233,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .status-completed {
-    background-color: #dbeafe;
-    color: #1e40af;
+    background-color: #ede9fe;
+    color: #5b21b6;
 }
 
 .status-cancelled {

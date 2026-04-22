@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" modified="2026-04-22T00:00:00.000Z" agent="FreelanceMarketPlace" version="22.0.0">
+  <diagram name="Messaging Polling Sequence" id="msg">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="650" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" value="Messaging &amp; Polling Sequence" style="text;html=1;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="350" y="10" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="browser" value="Browser (Sender)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="60" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="view" value="Django view&#10;(messaging)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="60" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="notif" value="NotificationService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#c2410c;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="60" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="MySQL" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#e0f2fe;strokeColor=#0369a1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="880" y="60" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="b2" value="Browser (Recipient)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0369a1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="500" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" value="" style="endArrow=none;html=1;strokeColor=#059669;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="150" y="100" as="sourcePoint"/><mxPoint x="150" y="500" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="l2" value="" style="endArrow=none;html=1;strokeColor=#047857;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="440" y="100" as="sourcePoint"/><mxPoint x="440" y="500" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="l3" value="" style="endArrow=none;html=1;strokeColor=#c2410c;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="705" y="100" as="sourcePoint"/><mxPoint x="705" y="500" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="l4" value="" style="endArrow=none;html=1;strokeColor=#0369a1;dashed=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="930" y="110" as="sourcePoint"/><mxPoint x="930" y="500" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m1" value="POST /conversations/{id}/messages/" style="endArrow=classic;html=1;strokeColor=#059669;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="150" y="150" as="sourcePoint"/><mxPoint x="440" y="150" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="INSERT Message" style="endArrow=classic;html=1;strokeColor=#0369a1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="440" y="185" as="sourcePoint"/><mxPoint x="930" y="185" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="create(type=new_message, user=recipient)" style="endArrow=classic;html=1;strokeColor=#c2410c;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="440" y="220" as="sourcePoint"/><mxPoint x="705" y="220" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="INSERT Notification" style="endArrow=classic;html=1;strokeColor=#0369a1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="705" y="255" as="sourcePoint"/><mxPoint x="930" y="255" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="200 OK" style="endArrow=classic;html=1;strokeColor=#059669;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="440" y="290" as="sourcePoint"/><mxPoint x="150" y="290" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="poll" value="every 4s:&#10;GET /conversations/{id}/messages/?after=N" style="endArrow=classic;html=1;strokeColor=#0369a1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="150" y="360" as="sourcePoint"/><mxPoint x="440" y="360" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="sel" value="SELECT WHERE id &gt; N" style="endArrow=classic;html=1;strokeColor=#0369a1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="440" y="400" as="sourcePoint"/><mxPoint x="930" y="400" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="resp" value="JSON (0..n new messages)" style="endArrow=classic;html=1;strokeColor=#0369a1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="440" y="440" as="sourcePoint"/><mxPoint x="150" y="440" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="b2note" value="Recipient's browser is also polling;&#10;sees the new message on next tick" style="text;html=1;fontSize=10;fontStyle=2;align=left;" vertex="1" parent="1">
+          <mxGeometry x="260" y="495" width="300" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

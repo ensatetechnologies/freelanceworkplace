@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" modified="2026-04-22T00:00:00.000Z" agent="FreelanceMarketPlace" version="22.0.0">
+  <diagram name="DFD Level 0" id="dfd0">
+    <mxGraphModel dx="1100" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Context Diagram (DFD Level 0)" style="text;html=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="250" y="10" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="system" value="0.0&#10;FreelanceMarketPlace&#10;(System)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="340" y="230" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="client" value="Client" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="260" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="freelancer" value="Freelancer" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0369a1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="260" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="admin" value="Administrator" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#b91c1c;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="email" value="Email Service&#10;(verification / reset)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#c2410c;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="430" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="Project · Fund · Approve" style="endArrow=classic;html=1;strokeColor=#059669;strokeWidth=1.5;" edge="1" parent="1" source="client" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="Listings · Notifications" style="endArrow=classic;html=1;strokeColor=#059669;strokeWidth=1.5;" edge="1" parent="1" source="system" target="client">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="Proposal · Deliverable" style="endArrow=classic;html=1;strokeColor=#0369a1;strokeWidth=1.5;" edge="1" parent="1" source="freelancer" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="Project feed · Payment" style="endArrow=classic;html=1;strokeColor=#0369a1;strokeWidth=1.5;" edge="1" parent="1" source="system" target="freelancer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="Moderation · Withdrawals" style="endArrow=classic;html=1;strokeColor=#b91c1c;strokeWidth=1.5;" edge="1" parent="1" source="admin" target="system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="KPIs · Alerts" style="endArrow=classic;html=1;strokeColor=#b91c1c;strokeWidth=1.5;dashed=1;" edge="1" parent="1" source="system" target="admin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="send(email)" style="endArrow=classic;html=1;strokeColor=#c2410c;strokeWidth=1.5;" edge="1" parent="1" source="system" target="email">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

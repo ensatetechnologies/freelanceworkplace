@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load core_extras %}
 
 {% block title %}Notifications - {{ PLATFORM_NAME }}{% endblock %}
 
@@ -198,7 +199,7 @@
                         {% if request.GET.filter == 'unread' %}
                             You're all caught up! No unread notifications.
                         {% elif request.GET.type %}
-                            No {{ request.GET.type|replace:"_":" " }} notifications.
+                            No {{ request.GET.type|humanize_underscores }} notifications.
                         {% else %}
                             You don't have any notifications yet.
                         {% endif %}

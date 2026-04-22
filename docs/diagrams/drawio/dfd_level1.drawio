@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" modified="2026-04-22T00:00:00.000Z" agent="FreelanceMarketPlace" version="22.0.0">
+  <diagram name="DFD Level 1" id="dfd1">
+    <mxGraphModel dx="1300" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" value="Data Flow Diagram — Level 1" style="text;html=1;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1"><mxGeometry x="400" y="10" width="500" height="30" as="geometry" /></mxCell>
+        <mxCell id="client" value="Client" style="shape=actor;fillColor=#d1fae5;strokeColor=#059669;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="60" y="120" width="60" height="80" as="geometry" /></mxCell>
+        <mxCell id="fl" value="Freelancer" style="shape=actor;fillColor=#e0f2fe;strokeColor=#0369a1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="60" y="280" width="60" height="80" as="geometry" /></mxCell>
+        <mxCell id="admin" value="Admin" style="shape=actor;fillColor=#fee2e2;strokeColor=#b91c1c;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="60" y="440" width="60" height="80" as="geometry" /></mxCell>
+        <mxCell id="p1" value="1.0&#10;Authentication&#10;&amp; Profile Mgmt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="220" y="100" width="160" height="100" as="geometry" /></mxCell>
+        <mxCell id="p2" value="2.0&#10;Project &#10;Management" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="220" y="230" width="160" height="100" as="geometry" /></mxCell>
+        <mxCell id="p3" value="3.0&#10;Proposals" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="430" y="230" width="140" height="80" as="geometry" /></mxCell>
+        <mxCell id="p4" value="4.0&#10;Contract &amp; Milestone&#10;Lifecycle" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="620" y="230" width="180" height="100" as="geometry" /></mxCell>
+        <mxCell id="p5" value="5.0&#10;Escrow &amp; Payments" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#ca8a04;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="850" y="230" width="160" height="100" as="geometry" /></mxCell>
+        <mxCell id="p6" value="6.0&#10;Messaging" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#5b21b6;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="220" y="400" width="160" height="80" as="geometry" /></mxCell>
+        <mxCell id="p7" value="7.0&#10;Reviews" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#b91c1c;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="430" y="400" width="140" height="80" as="geometry" /></mxCell>
+        <mxCell id="p8" value="8.0&#10;Notifications" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#c2410c;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="620" y="400" width="160" height="80" as="geometry" /></mxCell>
+        <mxCell id="p9" value="9.0&#10;Admin Dashboard&#10;&amp; Analytics" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#b91c1c;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="850" y="400" width="180" height="100" as="geometry" /></mxCell>
+        <mxCell id="d1" value="D1  Users" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f3f4f6;strokeColor=#374151;" vertex="1" parent="1"><mxGeometry x="180" y="570" width="140" height="50" as="geometry" /></mxCell>
+        <mxCell id="d2" value="D2  Projects" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f3f4f6;strokeColor=#374151;" vertex="1" parent="1"><mxGeometry x="340" y="570" width="140" height="50" as="geometry" /></mxCell>
+        <mxCell id="d3" value="D3  Proposals" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f3f4f6;strokeColor=#374151;" vertex="1" parent="1"><mxGeometry x="500" y="570" width="140" height="50" as="geometry" /></mxCell>
+        <mxCell id="d4" value="D4  Contracts &amp; Milestones" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f3f4f6;strokeColor=#374151;" vertex="1" parent="1"><mxGeometry x="660" y="570" width="180" height="50" as="geometry" /></mxCell>
+        <mxCell id="d5" value="D5  Escrow / Wallet / Transactions" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f3f4f6;strokeColor=#374151;" vertex="1" parent="1"><mxGeometry x="860" y="570" width="220" height="50" as="geometry" /></mxCell>
+        <mxCell id="d6" value="D6  Messages / Notifications" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f3f4f6;strokeColor=#374151;" vertex="1" parent="1"><mxGeometry x="340" y="640" width="220" height="50" as="geometry" /></mxCell>
+        <mxCell id="d7" value="D7  Reviews" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f3f4f6;strokeColor=#374151;" vertex="1" parent="1"><mxGeometry x="600" y="640" width="140" height="50" as="geometry" /></mxCell>
+        <mxCell id="a" style="endArrow=classic;html=1;" edge="1" parent="1" source="client" target="p1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="b" style="endArrow=classic;html=1;" edge="1" parent="1" source="fl" target="p1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="c" style="endArrow=classic;html=1;" edge="1" parent="1" source="client" target="p2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="d" style="endArrow=classic;html=1;" edge="1" parent="1" source="fl" target="p3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e" style="endArrow=classic;html=1;" edge="1" parent="1" source="p2" target="p3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f" style="endArrow=classic;html=1;" edge="1" parent="1" source="p3" target="p4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="g" style="endArrow=classic;html=1;" edge="1" parent="1" source="p4" target="p5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="h" style="endArrow=classic;html=1;" edge="1" parent="1" source="p4" target="p7"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="i" style="endArrow=classic;html=1;" edge="1" parent="1" source="p6" target="p8"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="j" style="endArrow=classic;html=1;" edge="1" parent="1" source="p4" target="p8"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="k" style="endArrow=classic;html=1;" edge="1" parent="1" source="admin" target="p9"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="l" style="endArrow=classic;html=1;dashed=1;strokeColor=#374151;" edge="1" parent="1" source="p1" target="d1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="m" style="endArrow=classic;html=1;dashed=1;strokeColor=#374151;" edge="1" parent="1" source="p2" target="d2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="n" style="endArrow=classic;html=1;dashed=1;strokeColor=#374151;" edge="1" parent="1" source="p3" target="d3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="o" style="endArrow=classic;html=1;dashed=1;strokeColor=#374151;" edge="1" parent="1" source="p4" target="d4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="p" style="endArrow=classic;html=1;dashed=1;strokeColor=#374151;" edge="1" parent="1" source="p5" target="d5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="q" style="endArrow=classic;html=1;dashed=1;strokeColor=#374151;" edge="1" parent="1" source="p6" target="d6"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="r" style="endArrow=classic;html=1;dashed=1;strokeColor=#374151;" edge="1" parent="1" source="p8" target="d6"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="s" style="endArrow=classic;html=1;dashed=1;strokeColor=#374151;" edge="1" parent="1" source="p7" target="d7"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

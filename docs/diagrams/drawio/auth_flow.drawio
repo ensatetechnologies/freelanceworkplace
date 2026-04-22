@@ -1,0 +1,53 @@
+<mxfile host="app.diagrams.net" modified="2026-04-22T00:00:00.000Z" agent="FreelanceMarketPlace" version="22.0.0">
+  <diagram name="Authentication Flow" id="auth">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" value="Authentication &amp; Role-Aware Redirect" style="text;html=1;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="350" y="10" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="start" value="Visitor" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;" vertex="1" parent="1">
+          <mxGeometry x="60" y="300" width="70" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="decision" value="Has account?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="320" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="signup" value="Signup form&#10;(email, password, role)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;" vertex="1" parent="1">
+          <mxGeometry x="370" y="180" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="verify" value="Send verification email&#10;(Allauth)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#c2410c;" vertex="1" parent="1">
+          <mxGeometry x="620" y="180" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="login" value="Login form&#10;(email + password)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#047857;" vertex="1" parent="1">
+          <mxGeometry x="370" y="420" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" value="Allauth authenticates&#10;(password_verify, session create)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0369a1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="420" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="role" value="Read user.role" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;" vertex="1" parent="1">
+          <mxGeometry x="650" y="300" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cdash" value="Client Dashboard" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="880" y="180" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fdash" value="Freelancer Dashboard" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0369a1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="880" y="300" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="adash" value="Admin Dashboard" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#b91c1c;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="880" y="420" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="endArrow=classic;html=1;strokeColor=#047857;" edge="1" parent="1" source="start" target="decision"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="No" style="endArrow=classic;html=1;strokeColor=#b91c1c;" edge="1" parent="1" source="decision" target="signup"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" value="Yes" style="endArrow=classic;html=1;strokeColor=#047857;" edge="1" parent="1" source="decision" target="login"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1;strokeColor=#c2410c;" edge="1" parent="1" source="signup" target="verify"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" value="click link" style="endArrow=classic;html=1;strokeColor=#047857;dashed=1;" edge="1" parent="1" source="verify" target="login"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" style="endArrow=classic;html=1;strokeColor=#0369a1;" edge="1" parent="1" source="login" target="auth"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" style="endArrow=classic;html=1;strokeColor=#0369a1;" edge="1" parent="1" source="auth" target="role"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e8" value="CLIENT" style="endArrow=classic;html=1;strokeColor=#059669;" edge="1" parent="1" source="role" target="cdash"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e9" value="FREELANCER" style="endArrow=classic;html=1;strokeColor=#0369a1;" edge="1" parent="1" source="role" target="fdash"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e10" value="ADMIN" style="endArrow=classic;html=1;strokeColor=#b91c1c;" edge="1" parent="1" source="role" target="adash"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
