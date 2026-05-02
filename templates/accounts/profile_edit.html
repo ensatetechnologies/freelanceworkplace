@@ -50,6 +50,9 @@
                                 {{ profile_form.title|as_crispy_field }}
                             </div>
                             <div class="mb-3">
+                                {{ profile_form.category|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
                                 {{ profile_form.bio|as_crispy_field }}
                             </div>
                             <div class="row">
@@ -61,8 +64,7 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                {{ profile_form.skills|as_crispy_field }}
-                                <small class="text-muted">Enter skills separated by commas</small>
+                                {{ profile_form.skills_input|as_crispy_field }}
                             </div>
                             <div class="mb-3">
                                 {{ profile_form.portfolio_url|as_crispy_field }}

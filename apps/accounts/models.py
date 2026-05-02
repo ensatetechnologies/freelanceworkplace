@@ -70,6 +70,14 @@ class FreelancerProfile(BaseModel):
     )
     title = models.CharField(max_length=100, blank=True, default='', help_text='Professional title, e.g. "Full Stack Developer"')
     bio = models.TextField(max_length=2000, blank=True, default='', help_text='Tell clients about yourself')
+    category = models.ForeignKey(
+        'projects.Category',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='freelancers',
+        help_text='Primary work category'
+    )
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     skills = models.JSONField(default=list, help_text='List of skills')
     experience_years = models.PositiveIntegerField(default=0)
