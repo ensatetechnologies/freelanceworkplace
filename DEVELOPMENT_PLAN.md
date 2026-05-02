@@ -630,16 +630,16 @@ class MyView(LoginRequiredMixin, FreelancerRequiredMixin, View):
 Create test accounts during development:
 ```
 Freelancer:
-- Email: freelancer@test.com
-- Password: testpass123
+- Email: freelancer@example.com
+- Password: freelancer123
 
 Client:
-- Email: client@test.com
-- Password: testpass123
+- Email: client@example.com
+- Password: client123
 
 Admin:
-- Email: admin@test.com
-- Password: adminpass123
+- Email: admin@example.com
+- Password: admin123
 ```
 
 ### 10.3 Running Automated Tests
@@ -678,6 +678,84 @@ git push origin main
 # Git: pull latest changes
 git pull origin main
 ```
+
+---
+
+## Recent Changes — `fix/category-and-view-all`
+
+### Bug fixes
+- **Admin dashboard 500 error.** `/dashboard/` was registered for both
+  `apps.core.urls` and `apps.admin_dashboard.urls`, so the admin dashboard URL
+  was unreachable and admins fell through to a non-existent
+  `core/dashboard.html`. Moved the admin dashboard mount to `/admin-panel/`
+  (`config/urls.py`), fixed `DashboardHomeView.template_name` to
+  `admin_dashboard/dashboard.html`, and updated `core.views.DashboardView` to
+  redirect admin/superuser/staff users to `admin_dashboard:home`. The fallback
+  for any other role now uses the freelancer-style template instead of a
+  missing one.
+- **Settings page `NoReverseMatch`.** `templates/accounts/settings.html` linked
+  to `{% url 'accounts:delete' %}` but no such URL existed. Added
+  `DeleteAccountView` (`apps/accounts/views.py`) and registered it as
+  `accounts:delete` (`apps/accounts/urls.py`). Admin/staff accounts are blocked
+  from self-deletion through the UI.
+- **`templates/projects/categories.html` missing.** The footer's
+  *Browse Categories* link returned 500. Added a clean grid template that
+  lists every active category with a project count.
+- **`templates/core/about.html` & `templates/core/contact.html` missing.**
+  Footer links *About Us* and *Contact* returned 500. Added new templates
+  matching the existing visual style.
+- **Profile-edit template error.** `profile_edit.html` referenced
+  `profile_form.skills` which doesn't exist on the form; replaced with the
+  correct `skills_input` and added the new `category` field.
+
+### Feature changes
+- **Freelancer profile category.** Added a `category`
+  ForeignKey on `FreelancerProfile` (→ `projects.Category`) plus migration
+  `accounts/0003_freelancerprofile_category.py`. The freelancer profile setup
+  and edit forms now expose a *Category* dropdown ("Select your work
+  category") with all active categories. The awkwardly-labelled
+  *Skills input* field was renamed to *Skills*.
+- **"View All" on Featured Projects.** The home-page button now links to
+  `/projects/?featured=1` instead of `/projects/`. `ProjectListView` honours
+  the `featured` query parameter and `projects/list.html` re-titles the
+  results page to *Featured Projects* when the filter is active.
+- **Role-aware navbar.** `templates/navbar.html`:
+  - *Find Work* is hidden when the user role is `client`.
+  - *Find Talent* is hidden when the user role is `freelancer`.
+  - *How It Works* is hidden for any authenticated user (kept for anonymous
+    visitors only).
+  - The brand link (`{{ PLATFORM_NAME }}`) goes to `/dashboard/` for
+    authenticated users and `/` for anonymous visitors.
+- **Home redirect for logged-in users.** `core.views.HomeView.dispatch()` now
+  redirects authenticated users to `core:dashboard` (which in turn routes
+  admins to `/admin-panel/`), so visiting `/` never sends a logged-in user
+  back to the marketing landing page.
+
+### Test users seeded
+The development DB now contains three role-specific test accounts. Their
+credentials live in `docs/diagrams/README.md` and are repeated in §10.2 above.
+
+| Role       | Login (email)            | Password        |
+|------------|--------------------------|-----------------|
+| Admin      | `admin@example.com`      | `admin123`      |
+| Freelancer | `freelancer@example.com` | `freelancer123` |
+| Client     | `client@example.com`     | `client123`     |
+
+> Login is by **email** (allauth `ACCOUNT_AUTHENTICATION_METHOD = 'email'`).
+
+### Smoke tested
+After all changes the following endpoints return `200`:
+
+- Public: `/`, `/projects/`, `/projects/?featured=1`, `/projects/categories/`,
+  `/projects/?category=health-care`, `/about/`, `/contact/`,
+  `/how-it-works/`, `/accounts/login/`, `/accounts/signup/`.
+- Authenticated (per role): `/dashboard/`, `/contracts/`, `/projects/`,
+  `/accounts/freelancers/`, `/proposals/my-proposals/`, `/payments/wallet/`,
+  `/accounts/profile/edit/`, `/accounts/settings/`.
+- Admin: `/dashboard/` redirects to `/admin-panel/` and the admin home
+  renders. (Admin sub-pages — `users/`, `projects/`, `categories/`,
+  `withdrawals/`, `contracts/`, `reports/` — still 500 because their
+  templates were never created; pre-existing and out of scope of this branch.)
 
 ---
 

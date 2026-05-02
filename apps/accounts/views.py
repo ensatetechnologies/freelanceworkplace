@@ -3,8 +3,9 @@ Views for accounts app.
 """
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import (
-    TemplateView, DetailView, UpdateView, ListView
+    TemplateView, DetailView, UpdateView, ListView, View
 )
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -188,3 +189,26 @@ class FreelancerListView(ListView):
 class SettingsView(LoginRequiredMixin, TemplateView):
     """Account settings view."""
     template_name = 'accounts/settings.html'
+
+
+class DeleteAccountView(LoginRequiredMixin, View):
+    """Permanently delete the logged-in user's account."""
+    
+    def get(self, request, *args, **kwargs):
+        return redirect('accounts:settings')
+    
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        # Staff/superusers shouldn't delete themselves through the UI
+        if user.is_staff or user.is_superuser:
+            messages.error(request, 'Admin accounts cannot be deleted from the settings page.')
+            return redirect('accounts:settings')
+        
+        email = user.email
+        logout(request)
+        user.delete()
+        messages.success(
+            request,
+            f'Your account ({email}) has been permanently deleted. We\'re sorry to see you go.'
+        )
+        return redirect('core:home')

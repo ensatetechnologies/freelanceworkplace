@@ -1,7 +1,7 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">
+        <a class="navbar-brand fw-bold" href="{% if user.is_authenticated %}{% url 'core:dashboard' %}{% else %}{% url 'core:home' %}{% endif %}">
             <i class="bi bi-briefcase-fill me-2"></i>{{ PLATFORM_NAME }}
         </a>
         
@@ -11,15 +11,21 @@
         
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
+                {% if user.role != 'client' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'projects:list' %}">Find Work</a>
                 </li>
+                {% endif %}
+                {% if user.role != 'freelancer' %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'accounts:freelancer_list' %}">Find Talent</a>
                 </li>
+                {% endif %}
+                {% if not user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'core:how_it_works' %}">How It Works</a>
                 </li>
+                {% endif %}
             </ul>
             
             <ul class="navbar-nav">

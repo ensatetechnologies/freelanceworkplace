@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container py-4">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Get in Touch</h1>
+                <p class="lead mb-0">
+                    We'd love to hear from you. Send us a message and we'll get back to you soon.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="row g-5">
+            <!-- Contact Info -->
+            <div class="col-lg-5">
+                <h2 class="fw-bold mb-3">Let's talk</h2>
+                <p class="text-muted mb-4">
+                    Have a question about the platform, need help with your account, or just
+                    want to say hello? Reach out using any of the channels below.
+                </p>
+
+                <div class="d-flex align-items-start mb-4">
+                    <div class="rounded-circle bg-primary-subtle d-inline-flex align-items-center justify-content-center me-3 flex-shrink-0"
+                         style="width: 50px; height: 50px;">
+                        <i class="bi bi-envelope fs-4 text-primary"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Email Us</h6>
+                        <p class="text-muted mb-0">
+                            <a href="mailto:support@freelancemarketplace.com" class="text-decoration-none">
+                                support@freelancemarketplace.com
+                            </a>
+                        </p>
+                        <small class="text-muted">We typically respond within 24 hours</small>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start mb-4">
+                    <div class="rounded-circle bg-success-subtle d-inline-flex align-items-center justify-content-center me-3 flex-shrink-0"
+                         style="width: 50px; height: 50px;">
+                        <i class="bi bi-headset fs-4 text-success"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Help Center</h6>
+                        <p class="text-muted mb-0">
+                            Browse our <a href="{% url 'core:how_it_works' %}" class="text-decoration-none">How It Works</a> page
+                            for answers to common questions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start mb-4">
+                    <div class="rounded-circle bg-warning-subtle d-inline-flex align-items-center justify-content-center me-3 flex-shrink-0"
+                         style="width: 50px; height: 50px;">
+                        <i class="bi bi-clock fs-4 text-warning"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Response Time</h6>
+                        <p class="text-muted mb-0">Monday – Friday, 9:00 AM – 6:00 PM (UTC)</p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start">
+                    <div class="rounded-circle bg-info-subtle d-inline-flex align-items-center justify-content-center me-3 flex-shrink-0"
+                         style="width: 50px; height: 50px;">
+                        <i class="bi bi-chat-dots fs-4 text-info"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">In-App Messaging</h6>
+                        <p class="text-muted mb-0">
+                            Logged-in users can message clients and freelancers directly from any project page.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="fw-bold mb-4">Send a Message</h3>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="post" action="">
+                            {% csrf_token %}
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="contact_name" class="form-label fw-medium">Your Name</label>
+                                    <input type="text" name="name" id="contact_name"
+                                           class="form-control form-control-lg" placeholder="Jane Doe" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="contact_email" class="form-label fw-medium">Email Address</label>
+                                    <input type="email" name="email" id="contact_email"
+                                           class="form-control form-control-lg" placeholder="you@example.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="contact_subject" class="form-label fw-medium">Subject</label>
+                                    <input type="text" name="subject" id="contact_subject"
+                                           class="form-control form-control-lg" placeholder="What is this about?" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="contact_message" class="form-label fw-medium">Message</label>
+                                    <textarea name="message" id="contact_message" rows="6"
+                                              class="form-control" placeholder="Tell us how we can help..." required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                                        <i class="bi bi-send me-2"></i>Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

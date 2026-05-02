@@ -19,7 +19,7 @@ from apps.payments.services import PaymentService
 
 class DashboardHomeView(LoginRequiredMixin, AdminRequiredMixin, TemplateView):
     """Admin dashboard home with statistics."""
-    template_name = 'admin_dashboard/home.html'
+    template_name = 'admin_dashboard/dashboard.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

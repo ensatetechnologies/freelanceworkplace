@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container py-4">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">About {{ PLATFORM_NAME }}</h1>
+                <p class="lead mb-0">
+                    Empowering businesses and freelancers to do great work, together.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission Section -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 mb-3">OUR MISSION</span>
+                <h2 class="display-6 fw-bold mb-3">Connecting talent with opportunity</h2>
+                <p class="text-muted lead mb-3">
+                    {{ PLATFORM_NAME }} is a marketplace built to make freelance work simpler,
+                    safer, and more rewarding for everyone involved.
+                </p>
+                <p class="text-muted">
+                    Whether you're a client looking to hire skilled professionals or a freelancer
+                    searching for meaningful projects, our platform gives you the tools you need:
+                    secure escrow payments, transparent reviews, milestone tracking, and direct
+                    messaging — all in one place.
+                </p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="bg-light rounded-4 p-5">
+                    <i class="bi bi-globe2 text-primary" style="font-size: 8rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold">What We Stand For</h2>
+            <p class="text-muted lead">The values that shape every part of our platform</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-primary-subtle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 70px; height: 70px;">
+                            <i class="bi bi-shield-check fs-3 text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold">Trust & Security</h5>
+                        <p class="text-muted small mb-0">
+                            Escrow protection and verified profiles keep both sides safe on every project.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-success-subtle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 70px; height: 70px;">
+                            <i class="bi bi-people fs-3 text-success"></i>
+                        </div>
+                        <h5 class="fw-bold">Community</h5>
+                        <p class="text-muted small mb-0">
+                            A thriving network of clients and freelancers who help each other succeed.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-warning-subtle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 70px; height: 70px;">
+                            <i class="bi bi-lightning fs-3 text-warning"></i>
+                        </div>
+                        <h5 class="fw-bold">Quality Work</h5>
+                        <p class="text-muted small mb-0">
+                            Verified reviews and milestone-based delivery ensure great outcomes every time.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-info-subtle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 70px; height: 70px;">
+                            <i class="bi bi-heart fs-3 text-info"></i>
+                        </div>
+                        <h5 class="fw-bold">Fairness</h5>
+                        <p class="text-muted small mb-0">
+                            Transparent pricing and dispute resolution that works for both sides.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="row g-4 text-center">
+            <div class="col-md-3 col-6">
+                <div class="p-4">
+                    <h2 class="display-5 fw-bold text-primary mb-1">10K+</h2>
+                    <p class="text-muted mb-0">Freelancers</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="p-4">
+                    <h2 class="display-5 fw-bold text-success mb-1">5K+</h2>
+                    <p class="text-muted mb-0">Clients</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="p-4">
+                    <h2 class="display-5 fw-bold text-warning mb-1">25K+</h2>
+                    <p class="text-muted mb-0">Projects Completed</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="p-4">
+                    <h2 class="display-5 fw-bold text-info mb-1">98%</h2>
+                    <p class="text-muted mb-0">Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-dark text-white">
+    <div class="container py-4">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h2 class="display-6 fw-bold mb-3">Join Our Growing Community</h2>
+                <p class="lead mb-4">
+                    Start your journey today — whether you're hiring or looking for work.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg px-4">
+                        <i class="bi bi-person-plus me-2"></i>Create Free Account
+                    </a>
+                    <a href="{% url 'core:contact' %}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-envelope me-2"></i>Get in Touch
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

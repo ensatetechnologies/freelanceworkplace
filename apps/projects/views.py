@@ -42,6 +42,10 @@ class ProjectListView(ListView):
         if category:
             queryset = queryset.filter(category__slug=category)
         
+        # Featured filter
+        if self.request.GET.get('featured') in ('1', 'true', 'True'):
+            queryset = queryset.filter(is_featured=True)
+        
         # Budget type filter
         budget_type = self.request.GET.get('budget_type')
         if budget_type:
@@ -83,6 +87,7 @@ class ProjectListView(ListView):
             'budget_type': self.request.GET.get('budget_type', ''),
             'experience_level': self.request.GET.get('experience_level', ''),
             'order': self.request.GET.get('order', '-created_at'),
+            'featured': self.request.GET.get('featured', ''),
         }
         return context
 

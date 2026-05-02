@@ -32,7 +32,7 @@ urlpatterns = [
     path('payments/', include('apps.payments.urls')),
     path('reviews/', include('apps.reviews.urls')),
     path('notifications/', include('apps.notifications.urls')),
-    path('dashboard/', include('apps.admin_dashboard.urls')),
+    path('admin-panel/', include('apps.admin_dashboard.urls')),
     
     # Django Allauth
     path('accounts/', include('allauth.urls')),

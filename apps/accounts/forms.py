@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from allauth.account.forms import SignupForm
 from .models import User, FreelancerProfile, ClientProfile
+from apps.projects.models import Category
 
 
 class CustomSignupForm(SignupForm):
@@ -47,6 +48,7 @@ class FreelancerProfileForm(forms.ModelForm):
     
     skills_input = forms.CharField(
         required=False,
+        label='Skills',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Python, Django, JavaScript, React...'
@@ -57,11 +59,12 @@ class FreelancerProfileForm(forms.ModelForm):
     class Meta:
         model = FreelancerProfile
         fields = [
-            'title', 'bio', 'hourly_rate', 'experience_years',
+            'title', 'category', 'bio', 'hourly_rate', 'experience_years',
             'availability', 'portfolio_url', 'github_url', 'linkedin_url'
         ]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Full Stack Developer'}),
+            'category': forms.Select(attrs={'class': 'form-select'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'hourly_rate': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
             'experience_years': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
@@ -73,6 +76,8 @@ class FreelancerProfileForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.filter(is_active=True)
+        self.fields['category'].empty_label = 'Select your work category'
         if self.instance and self.instance.skills:
             self.fields['skills_input'].initial = ', '.join(self.instance.skills)
     
