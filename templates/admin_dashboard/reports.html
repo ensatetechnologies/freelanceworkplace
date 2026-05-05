@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reports - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1"><i class="bi bi-graph-up me-2"></i>Platform Reports</h2>
+                <p class="text-muted mb-0">Last {{ days }} days of activity.</p>
+            </div>
+            <a href="{% url 'admin_dashboard:home' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+            <form method="get" class="row g-2 align-items-center">
+                <div class="col-auto"><label class="col-form-label">Date range:</label></div>
+                <div class="col-md-3">
+                    <select name="days" class="form-select" onchange="this.form.submit()">
+                        <option value="7"  {% if days == 7  %}selected{% endif %}>Last 7 days</option>
+                        <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
+                        <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
+                        <option value="365"{% if days == 365 %}selected{% endif %}>Last year</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3"><h5 class="fw-bold mb-0">Transactions</h5></div>
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead class="table-light"><tr><th>Type</th><th>Count</th><th>Total</th></tr></thead>
+                        <tbody>
+                            {% for row in transaction_summary %}
+                            <tr>
+                                <td>{{ row.type|title }}</td>
+                                <td>{{ row.count }}</td>
+                                <td>${{ row.total|default:0|floatformat:2 }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center py-3 text-muted">No transactions in range.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3"><h5 class="fw-bold mb-0">Projects by Category</h5></div>
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead class="table-light"><tr><th>Category</th><th>Count</th></tr></thead>
+                        <tbody>
+                            {% for row in projects_by_category %}
+                            <tr>
+                                <td>{{ row.category__name|default:"Uncategorized" }}</td>
+                                <td>{{ row.count }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="2" class="text-center py-3 text-muted">No projects in range.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3"><h5 class="fw-bold mb-0">User Growth</h5></div>
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead class="table-light"><tr><th>Role</th><th>New Users</th></tr></thead>
+                        <tbody>
+                            {% for row in user_growth %}
+                            <tr>
+                                <td>{{ row.role|title }}</td>
+                                <td>{{ row.count }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="2" class="text-center py-3 text-muted">No new users in range.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

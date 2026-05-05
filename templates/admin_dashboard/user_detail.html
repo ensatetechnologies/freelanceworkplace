@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ profile_user.get_full_name|default:profile_user.username }} - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0"><i class="bi bi-person-badge me-2"></i>User Detail</h2>
+        <a href="{% url 'admin_dashboard:users' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Back to Users
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    {% if profile_user.avatar %}
+                        <img src="{{ profile_user.avatar.url }}" class="rounded-circle mb-3" width="96" height="96">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 96px; height: 96px;">
+                            <span class="text-white fs-2">{{ profile_user.first_name|slice:":1"|upper|default:profile_user.username|slice:":1"|upper }}</span>
+                        </div>
+                    {% endif %}
+                    <h5 class="fw-bold mb-1">{{ profile_user.get_full_name|default:profile_user.username }}</h5>
+                    <p class="text-muted mb-2">{{ profile_user.email }}</p>
+                    <span class="badge bg-secondary">{{ profile_user.get_role_display }}</span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span class="text-muted">Username</span><span>@{{ profile_user.username }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span class="text-muted">Phone</span><span>{{ profile_user.phone|default:"—" }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span class="text-muted">Verified</span>
+                        {% if profile_user.is_verified %}<span class="badge bg-success">Yes</span>
+                        {% else %}<span class="badge bg-warning">No</span>{% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span class="text-muted">Active</span>
+                        {% if profile_user.is_active %}<span class="badge bg-success">Yes</span>
+                        {% else %}<span class="badge bg-danger">No</span>{% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span class="text-muted">Joined</span><span>{{ profile_user.created_at|date:"M d, Y" }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            {% if profile %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="fw-bold mb-0">Profile</h5>
+                </div>
+                <div class="card-body">
+                    {% if profile_user.role == 'freelancer' %}
+                        <p><strong>Title:</strong> {{ profile.title|default:"—" }}</p>
+                        <p><strong>Hourly Rate:</strong> ${{ profile.hourly_rate }}</p>
+                        <p><strong>Experience:</strong> {{ profile.experience_years }} years</p>
+                        <p><strong>Availability:</strong> {{ profile.get_availability_display }}</p>
+                        <p><strong>Total Earnings:</strong> ${{ profile.total_earnings }}</p>
+                        <p><strong>Avg Rating:</strong> {{ profile.avg_rating }} ({{ profile.total_reviews }} reviews)</p>
+                        <p><strong>Bio:</strong></p>
+                        <p class="text-muted">{{ profile.bio|default:"No bio."|linebreaksbr }}</p>
+                    {% else %}
+                        <p><strong>Company:</strong> {{ profile.company_name|default:"—" }}</p>
+                        <p><strong>Website:</strong> {{ profile.company_website|default:"—" }}</p>
+                        <p><strong>Industry:</strong> {{ profile.industry|default:"—" }}</p>
+                        <p><strong>Company Size:</strong> {{ profile.get_company_size_display|default:"—" }}</p>
+                        <p><strong>Total Spent:</strong> ${{ profile.total_spent }}</p>
+                        <p><strong>Projects Posted:</strong> {{ profile.projects_posted }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if contracts %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3"><h5 class="fw-bold mb-0">Recent Contracts</h5></div>
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead class="table-light"><tr><th>Project</th><th>Status</th><th>Created</th></tr></thead>
+                        <tbody>
+                            {% for c in contracts %}
+                            <tr>
+                                <td>{{ c.project.title|truncatechars:40 }}</td>
+                                <td><span class="badge bg-secondary">{{ c.get_status_display }}</span></td>
+                                <td><small>{{ c.created_at|date:"M d, Y" }}</small></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if transactions %}
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3"><h5 class="fw-bold mb-0">Recent Transactions</h5></div>
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead class="table-light"><tr><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                        <tbody>
+                            {% for t in transactions %}
+                            <tr>
+                                <td>{{ t.get_type_display }}</td>
+                                <td>${{ t.amount }}</td>
+                                <td><span class="badge bg-secondary">{{ t.get_status_display }}</span></td>
+                                <td><small>{{ t.created_at|date:"M d, Y" }}</small></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

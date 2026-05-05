@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Withdrawal Requests - {{ PLATFORM_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1"><i class="bi bi-cash-stack me-2"></i>Withdrawals</h2>
+                <p class="text-muted mb-0">Process freelancer withdrawal requests.</p>
+            </div>
+            <a href="{% url 'admin_dashboard:home' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+            <form method="get" class="row g-2">
+                <div class="col-md-4">
+                    <select name="status" class="form-select">
+                        <option value="">All statuses</option>
+                        <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="approved" {% if request.GET.status == 'approved' %}selected{% endif %}>Approved</option>
+                        <option value="processed" {% if request.GET.status == 'processed' %}selected{% endif %}>Processed</option>
+                        <option value="rejected" {% if request.GET.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-funnel me-1"></i>Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Freelancer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Requested</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for w in withdrawals %}
+                    <tr>
+                        <td>{{ w.wallet.user.get_full_name|default:w.wallet.user.username }}<br>
+                            <small class="text-muted">{{ w.wallet.user.email }}</small>
+                        </td>
+                        <td class="fw-medium">${{ w.amount }}</td>
+                        <td>
+                            <span class="badge
+                                {% if w.status == 'pending' %}bg-warning
+                                {% elif w.status == 'approved' %}bg-info
+                                {% elif w.status == 'processed' %}bg-success
+                                {% elif w.status == 'rejected' %}bg-danger
+                                {% else %}bg-secondary{% endif %}">
+                                {{ w.get_status_display }}
+                            </span>
+                        </td>
+                        <td><small>{{ w.created_at|date:"M d, Y" }}</small></td>
+                        <td>
+                            {% if w.status == 'pending' or w.status == 'approved' %}
+                            <form method="post" action="{% url 'admin_dashboard:process_withdrawal' pk=w.pk %}" class="d-flex gap-1">
+                                {% csrf_token %}
+                                {% if w.status == 'pending' %}
+                                    <button type="submit" name="action" value="approve" class="btn btn-sm btn-outline-success">Approve</button>
+                                {% endif %}
+                                {% if w.status == 'approved' %}
+                                    <button type="submit" name="action" value="process" class="btn btn-sm btn-success">Process</button>
+                                {% endif %}
+                                <button type="submit" name="action" value="reject" class="btn btn-sm btn-outline-danger">Reject</button>
+                            </form>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="text-center py-4 text-muted">No withdrawal requests.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if is_paginated %}
+    <nav class="mt-3">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item active"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
