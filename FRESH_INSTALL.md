@@ -185,13 +185,27 @@ This populates:
 
 ---
 
-## Step 7 — Create an admin user
+## Step 7 — Create the demo accounts (freelancer, client, admin)
+
+A management command creates / refreshes the three demo users in one shot. Re-running it is safe.
+
+```bash
+python manage.py seed_test_users
+```
+
+This creates:
+
+| Email                    | Password       | Role        |
+| ------------------------ | -------------- | ----------- |
+| freelancer@example.com   | freelancer123  | Freelancer  |
+| client@example.com       | client123      | Client      |
+| admin@example.com        | admin123       | Admin (staff + superuser) |
+
+You can also create your own admin user:
 
 ```bash
 python manage.py createsuperuser
 ```
-
-Provide an email, username, and password when prompted.
 
 ---
 
@@ -260,7 +274,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py loaddata fixtures/initial_data.json
-python manage.py createsuperuser
+python manage.py seed_test_users
 python manage.py runserver
 ```
 
@@ -274,6 +288,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py loaddata fixtures/initial_data.json
-python manage.py createsuperuser
+python manage.py seed_test_users
 python manage.py runserver
 ```
